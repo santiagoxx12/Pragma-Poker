@@ -1,0 +1,141 @@
+.game-room {
+  min-height: 100vh;
+  color: white;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.logo img {
+  height: 2.5rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.refresh-btn, .invite-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+}
+
+.invite-btn {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.player-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.main-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.poker-table {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 2/1;
+}
+
+.table-outline {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100vh;
+}
+
+.players {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.player {
+  position: absolute;
+  transform-origin: center;
+  text-align: center;
+}
+
+.player-avatar.has-voted::after {
+  content: '';
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #4CAF50;
+  border-radius: 50%;
+}
+
+.card-selector {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: white;
+  color: #333;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.cards {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.card {
+  width: 4rem;
+  height: 6rem;
+  border: 2px solid #4a3f6b;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #4a3f6b;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card.selected {
+  background: #4a3f6b;
+  color: white;
+}

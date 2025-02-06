@@ -1,0 +1,11 @@
+<div *ngIf="!isSpectator" class="card-selector">
+  <h3>Elige una carta 👆</h3>
+  <div class="cards">
+    <button *ngFor="let card of availableCards"
+            [class.selected]="selectedCard === card"
+            (click)="selectCard(card)"
+            class="card">
+      {{ card }}
+    </button>
+  </div>
+</div>

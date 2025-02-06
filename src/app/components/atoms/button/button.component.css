@@ -1,26 +1,28 @@
 button {
-    padding: 8px 10px;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 80%;
-    font-weight: 600;
-  }
-  
-  button:disabled {
-    background:#9D9DA1 30%;
-    color: #9D9DA1 60%;
-    cursor: not-allowed;
-  }
-  
-  button:not(:disabled) {
-    background: #F6F7FC;
-    color: #330072;
-  }
-  
-  button:enabled:hover {
-    background: #F6F7FC;
-    color: #330072;
-    box-shadow: 0 0 15px rgba(246, 247, 252, 0.8), inset 0 0 20px rgba(246, 247, 252, 0.2);
-  }
+  padding: 8px 10px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 70%;
+  font-weight: 600;
+  display: block;
+  margin: 0 auto;
+}
+
+button:disabled {
+  background: #9D9DA1 30%;
+  color: #9D9DA1 60%;
+  cursor: not-allowed;
+}
+
+button:not(:disabled) {
+  background: #F6F7FC;
+  color: #330072;
+}
+
+button:enabled:hover {
+  background: #F6F7FC;
+  color: #330072;
+  box-shadow: 0 0 15px rgba(246, 247, 252, 0.8), inset 0 0 20px rgba(246, 247, 252, 0.2);
+}

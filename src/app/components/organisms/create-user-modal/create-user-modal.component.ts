@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { maxThreeNumbersValidator, onlyNumbersValidator } from '../../../utils/validators/game-name.validator';
 import { CommonModule } from '@angular/common';
@@ -67,6 +67,7 @@ export class CreateUserModalComponent {
         viewMode: this.viewModeControl.value,
         isAdmin: true
       });
+      this.close.emit();
     }
   }
 }

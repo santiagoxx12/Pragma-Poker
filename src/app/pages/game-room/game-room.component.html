@@ -1,0 +1,33 @@
+<div class="game-room">
+  <app-game-header
+    [title]="sprintName"
+    [playerName]="playerInitials"
+    (onInvite)="invitePlayers()">
+  </app-game-header>
+
+  <main class="main-content">
+    <div class="poker-table">
+      <div class="table-outline"></div>
+      <div class="players">
+        <div *ngFor="let player of players; let i = index" [style.transform]="getPlayerPosition(i, players.length)"
+          class="player">
+          <div class="player-avatar" [class.has-voted]="player.selectedCard">
+            {{ getInitials(player.name) }}
+          </div>
+          <div class="player-name">{{ player.name }}</div>
+          <div *ngIf="revealed" class="player-card">
+            {{ player.selectedCard || 'Espectador' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-card-selector [availableCards]="availableCards" [selectedCard]="selectedCard" [isSpectator]="isSpectator"
+      (onCardSelect)="selectCard($event)">
+    </app-card-selector>
+
+
+  </main>
+
+  <app-create-user-modal *ngIf="showUserModal" (userCreated)="onUserCreated($event)" (close)="showUserModal = false">
+  </app-create-user-modal>

@@ -5,14 +5,14 @@ import { InputFieldComponent } from '../../components/atoms/input-field/input-fi
 import { ButtonComponent } from '../../components/atoms/button/button.component';
 import { HeaderBarComponent } from '../../components/molecules/header-bar/header-bar.component';
 import { CommonModule } from '@angular/common';
-import { CreateUserModalComponent } from '../../components/organisms/create-user-modal/create-user-modal.component';
+import { Router } from '@angular/router';
 
 interface GameForm {
   name: FormControl<string>;
 }
 
 @Component({
-  selector: 'app-create-game-page', 
+  selector: 'app-create-game-page',
   templateUrl: './create-game-page.component.html',
   styleUrls: ['./create-game-page.component.css'],
   imports: [
@@ -21,13 +21,16 @@ interface GameForm {
     InputFieldComponent,
     ButtonComponent,
     HeaderBarComponent,
-    CreateUserModalComponent
+
   ],
 })
 export class CreateGamePageComponent {
   showUserModal = false;
   gameName = '';
-  
+
+
+  constructor(private router: Router) {}
+
   gameForm = new FormGroup<GameForm>({
     name: new FormControl('', {
       nonNullable: true,
@@ -49,14 +52,10 @@ export class CreateGamePageComponent {
   onGameCreate() {
     if (this.gameForm.valid) {
       this.gameName = this.nameControl.value;
-      this.showUserModal = true;
-    }
+      this.router.navigate(['/game-room', this.gameName]);
+        }
   }
 
-  onUserCreated(userData: {name: string, viewMode: string, isAdmin: boolean}) {
-    // Aquí puedes guardar los datos localmente o donde prefieras
-    console.log('Game:', this.gameName, 'User:', userData);
-    // Añade tu lógica de navegación aquí
-  }
-  
+
+
 }

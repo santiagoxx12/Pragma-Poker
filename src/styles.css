@@ -2,12 +2,14 @@
   font-family: 'Poppins';
   src: url('./assets/fonts/Poppins-Regular.ttf');
 }
-• {
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins';
 }
+
 
 body {
   background: radial-gradient(circle, #330072 0%, #1F0D3F 70%);
@@ -15,5 +17,4 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Poppins';
 }

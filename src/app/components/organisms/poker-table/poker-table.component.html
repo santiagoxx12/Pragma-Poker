@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="table-container">
+    <div class="border"></div>
+
+    <div class="players">
+      <ng-container *ngFor="let player of players; let i = index">
+        <div [style.transform]="getPlayerPosition(i, players.length)" class="player-position">
+          <app-player-avatar
+            [name]="player.name"
+            [hasSelectedCard]="!!player.selectedCard"/>
+          <div *ngIf="revealed || player.viewMode === 'spectator'" class="player-status">
+            {{ player.selectedCard || 'Espectador' }}
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
