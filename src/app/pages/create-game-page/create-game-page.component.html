@@ -1,0 +1,8 @@
+<app-header-bar></app-header-bar>
+
+<div class="container">
+  <form [formGroup]="gameForm">
+    <app-input-field label="Nombre de la partida" [control]="nameControl"></app-input-field>
+        <app-button text="Crear Partida" [disabled]="gameForm.invalid"></app-button>
+  </form>
+</div>

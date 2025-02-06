@@ -1,0 +1,12 @@
+<div class="input-container">
+    <label>{{ label }}</label>
+    <input [formControl]="control" type="text" (blur)="control.markAsTouched()" />
+    <div class="error-message" *ngIf="shouldShowError()">
+      <span *ngIf="control.errors?.['required']">El nombre es obligatorio.</span>
+      <span *ngIf="control.errors?.['minlength']">Debe tener al menos 5 caracteres.</span>
+      <span *ngIf="control.errors?.['maxlength']">No puede superar los 20 caracteres.</span>
+      <span *ngIf="control.errors?.['pattern']">Solo se permiten letras y números.</span>
+      <span *ngIf="control.errors?.['maxThreeNumbers']">Máximo 3 números permitidos.</span>
+      <span *ngIf="control.errors?.['onlyNumbers']">No puede contener solo números.</span>
+    </div>
+  </div>

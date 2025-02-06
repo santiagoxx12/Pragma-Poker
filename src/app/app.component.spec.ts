@@ -20,16 +20,12 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
+
   it(`should have as title 'pragma-poker'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app.title).toEqual('pragma-poker');
   });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, pragma-poker');
-  });
+//ya, por eso debes aprender a leer cada prueba para ver si te sirven o no, las pruebas de 
+// app. component vienen por defecto, entonces si no te sirven borras a que no necesites
 });
