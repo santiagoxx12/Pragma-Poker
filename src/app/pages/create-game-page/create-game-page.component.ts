@@ -4,6 +4,8 @@ import { maxThreeNumbersValidator, onlyNumbersValidator } from '../../utils/vali
 import { InputFieldComponent } from '../../components/atoms/input-field/input-field.component';
 import { ButtonComponent } from '../../components/atoms/button/button.component';
 import { HeaderBarComponent } from '../../components/molecules/header-bar/header-bar.component';
+import { CommonModule } from '@angular/common';
+import { CreateUserModalComponent } from '../../components/organisms/create-user-modal/create-user-modal.component';
 
 interface GameForm {
   name: FormControl<string>;
@@ -13,9 +15,18 @@ interface GameForm {
   selector: 'app-create-game-page', 
   templateUrl: './create-game-page.component.html',
   styleUrls: ['./create-game-page.component.css'],
-  imports:[InputFieldComponent,ButtonComponent,HeaderBarComponent,ReactiveFormsModule] 
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputFieldComponent,
+    ButtonComponent,
+    HeaderBarComponent,
+    CreateUserModalComponent
+  ],
 })
 export class CreateGamePageComponent {
+  showUserModal = false;
+  gameName = '';
   
   gameForm = new FormGroup<GameForm>({
     name: new FormControl('', {
@@ -33,6 +44,19 @@ export class CreateGamePageComponent {
 
   get nameControl() {
     return this.gameForm.controls.name;
+  }
+
+  onGameCreate() {
+    if (this.gameForm.valid) {
+      this.gameName = this.nameControl.value;
+      this.showUserModal = true;
+    }
+  }
+
+  onUserCreated(userData: {name: string, viewMode: string, isAdmin: boolean}) {
+    // Aquí puedes guardar los datos localmente o donde prefieras
+    console.log('Game:', this.gameName, 'User:', userData);
+    // Añade tu lógica de navegación aquí
   }
   
 }

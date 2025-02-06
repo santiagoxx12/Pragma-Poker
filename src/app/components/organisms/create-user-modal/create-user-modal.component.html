@@ -1,0 +1,31 @@
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+    <div class="modal-content">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <app-input-field 
+          label="Nombre" 
+          [control]="nameControl">
+        </app-input-field>
+        
+        <div class="radio-group">
+          <app-radio-button
+            label="Jugador"
+            value="player"
+            id="player"
+            [control]="viewModeControl">
+          </app-radio-button>
+          
+          <app-radio-button
+            label="Espectador"
+            value="spectator"
+            id="spectator"
+            [control]="viewModeControl">
+          </app-radio-button>
+        </div>
+
+        <app-button 
+          text="Crear"
+          [disabled]="userForm.invalid">
+        </app-button>
+      </form>
+    </div>
+  </div>

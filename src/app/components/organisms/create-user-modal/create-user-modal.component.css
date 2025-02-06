@@ -1,0 +1,46 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: #1F0D3F;
+    padding: 3rem;
+    border-radius: 25px;
+    max-width: 80%;
+    width: 400px;
+  }
+  
+  .radio-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    gap: 10px; 
+    width: 100%; 
+  }
+  
+  .radio-group app-radio-button:first-child {
+    margin-right: auto; 
+  }
+  
+  .radio-group app-radio-button:last-child {
+    margin-left: auto;
+  }
+  
+
+  @media (max-width: 480px) {
+    .modal-content {
+      padding: 1rem;
+      width: 95%;
+    }
+
+  }
+  

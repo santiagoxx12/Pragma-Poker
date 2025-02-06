@@ -1,8 +1,21 @@
+<!-- src/pages/create-game-page/create-game-page.component.html -->
 <app-header-bar></app-header-bar>
 
 <div class="container">
-  <form [formGroup]="gameForm">
-    <app-input-field label="Nombre de la partida" [control]="nameControl"></app-input-field>
-        <app-button text="Crear Partida" [disabled]="gameForm.invalid"></app-button>
+  <form [formGroup]="gameForm" (ngSubmit)="onGameCreate()">
+    <app-input-field 
+      label="Nombre de la partida" 
+      [control]="nameControl">
+    </app-input-field>
+    <app-button 
+      text="Crear Partida" 
+      [disabled]="gameForm.invalid">
+    </app-button>
   </form>
 </div>
+
+<app-create-user-modal
+  *ngIf="showUserModal"
+  (userCreated)="onUserCreated($event)"
+  (close)="showUserModal = false">
+</app-create-user-modal>
