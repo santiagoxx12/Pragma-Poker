@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { maxThreeNumbersValidator, onlyNumbersValidator } from '../../../utils/validators/game-name.validator';
 import { CommonModule } from '@angular/common';
@@ -6,11 +6,11 @@ import { InputFieldComponent } from '../../atoms/input-field/input-field.compone
 import { RadioButtonComponent } from '../../atoms/radio-button/radio-button.component';
 import { ButtonComponent } from '../../atoms/button/button.component';
 
-
 interface UserForm {
   name: FormControl<string>;
   viewMode: FormControl<string>;
 }
+
 @Component({
   selector: 'app-create-user-modal',
   standalone: true,
@@ -22,14 +22,14 @@ interface UserForm {
     ButtonComponent
   ],
   templateUrl: './create-user-modal.component.html',
-  styleUrl: './create-user-modal.component.css'
+  styleUrls: ['./create-user-modal.component.css']
 })
-export class CreateUserModalComponent {
-  @Output() userCreated = new EventEmitter<{name: string, viewMode: string, isAdmin: boolean}>();
+export class CreateUserModalComponent implements OnInit {
+  @Output() userCreated = new EventEmitter<{ name: string; viewMode: string; isAdmin: boolean }>();
   @Output() close = new EventEmitter<void>();
 
   userForm = new FormGroup<UserForm>({
-    name: new FormControl('', {
+    name: new FormControl({ value: '', disabled: true },{
       nonNullable: true,
       validators: [
         Validators.required,
@@ -52,6 +52,16 @@ export class CreateUserModalComponent {
 
   get viewModeControl() {
     return this.userForm.controls.viewMode;
+  }
+
+  ngOnInit() {
+    // Obtener el nombre del usuario desde el localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      // Asignar el nombre al campo 'name' en el formulario
+      this.nameControl.setValue(user.name);
+    }
   }
 
   onOverlayClick(event: MouseEvent) {

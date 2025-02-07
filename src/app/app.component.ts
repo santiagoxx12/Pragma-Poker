@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 export class AppComponent {
   showSplashScreen = true;
 
-//mira aqui salen todos los errores pero hay alkgunos que no importan mucho, por ejemplo lo del title era una bobada, los que nos importan sonn los de las validaciones, pero resolvvamos los errores del app component, vamos al spect.ts
   title='pragma-poker';
 
   constructor(private readonly router: Router) {}
@@ -19,7 +18,7 @@ export class AppComponent {
   ngOnInit() {
     setTimeout(() => {
       this.showSplashScreen = false;
-      this.router.navigate(['/create-game']);
+      this.router.navigate(['/login']);
     }, 2000);
   }
 }
