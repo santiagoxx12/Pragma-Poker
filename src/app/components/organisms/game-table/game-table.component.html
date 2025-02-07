@@ -1,0 +1,41 @@
+<div class="game-table">
+    <div class="top-players">
+      <app-player-avatar *ngFor="let player of topPlayers"
+        [name]="player.name"
+        [isSpectator]="player.isSpectator"
+        [selectedCard]="player.selectedCard"
+        [hasSelectedCard]="!!player.selectedCard">
+      </app-player-avatar>
+    </div>
+    
+    <div class="middle-section">
+      <div class="left-player">
+        <app-player-avatar *ngIf="leftPlayer"
+          [name]="leftPlayer.name"
+          [isSpectator]="leftPlayer.isSpectator"
+          [selectedCard]="leftPlayer.selectedCard"
+          [hasSelectedCard]="!!leftPlayer.selectedCard">
+        </app-player-avatar>
+      </div>
+      
+      <div class="table-oval"></div>
+      
+      <div class="right-player">
+        <app-player-avatar *ngIf="rightPlayer"
+          [name]="rightPlayer.name"
+          [isSpectator]="rightPlayer.isSpectator"
+          [selectedCard]="rightPlayer.selectedCard"
+          [hasSelectedCard]="!!rightPlayer.selectedCard">
+        </app-player-avatar>
+      </div>
+    </div>
+    
+    <div class="bottom-players">
+      <app-player-avatar *ngFor="let player of bottomPlayers"
+        [name]="player.name"
+        [isSpectator]="player.isSpectator"
+        [selectedCard]="player.selectedCard"
+        [hasSelectedCard]="!!player.selectedCard">
+      </app-player-avatar>
+    </div>
+  </div>

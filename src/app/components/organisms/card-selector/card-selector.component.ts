@@ -9,14 +9,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './card-selector.component.css'
 })
 export class CardSelectorComponent {
-  @Input() availableCards: string[] = [];
-  @Input() selectedCard: string | null = null;
-  @Input() isSpectator = false;
-  @Output() onCardSelect = new EventEmitter<string>();
+  @Input() cards: string[] = [];
+  @Output() cardSelected = new EventEmitter<string>();
+  selectedCard: string | null = null;
 
   selectCard(card: string) {
-    if (!this.isSpectator) {
-      this.onCardSelect.emit(card);
-    }
+    this.selectedCard = card;
+    this.cardSelected.emit(card);
   }
 }

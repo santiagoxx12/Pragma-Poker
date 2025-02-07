@@ -1,24 +1,43 @@
-.player-avatar {
-  position: relative;
-  width: 48px;
-  height: 48px;
+.player-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: #e0b3ff;
-  color: #6a1b9a;
-  font-weight: bold;
-  font-size: 1.2rem;
-  border-radius: 50%;
+  gap: 8px;
 }
 
-.indicator {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 10px;
-  height: 10px;
-  background-color: #28a745;
+.player-card {
+  width: 60px;
+  height: 90px;
+  border: 2px solid #6B46C1;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+}
+
+.spectator-avatar {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  border: 2px solid white;
+  background: #E9D8FD;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #553C9A;
+  font-weight: bold;
+}
+
+.player-name {
+  font-size: 14px;
+  color: white;
+}
+
+.card-content {
+  font-size: 24px;
+  color: #2D3748;
+}
+
+.card-content.selected {
+  background: #E9D8FD;
 }

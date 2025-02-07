@@ -1,84 +1,67 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { GameState, Player } from '../../interfaces/game.interface';
+import { Player, GameState } from '../../interfaces/game.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
-  private readonly defaultScoring = ['0', '1', '3', '5', '8', '13', '21', '34', '55', '89', '?', '☕'];
-  private readonly fibonacci = ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?'];
-  private readonly tShirt = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '?'];
+  private readonly defaultPlayers: Player[] = [
+    { id: '1', name: 'David', isSpectator: false, isAdmin: false, selectedCard: null, position: 0 },
+    { id: '2', name: 'Alice', isSpectator: false, isAdmin: false, selectedCard: null, position: 1 },
+    { id: '3', name: 'Bob', isSpectator: true, isAdmin: false, selectedCard: null, position: 2 },
+    { id: '4', name: 'Charlie', isSpectator: false, isAdmin: false, selectedCard: null, position: 3 },
+    { id: '5', name: 'Eva', isSpectator: true, isAdmin: false, selectedCard: null, position: 5 },
+    { id: '6', name: 'Frank', isSpectator: false, isAdmin: false, selectedCard: null, position: 6 },
+    { id: '7', name: 'Grace', isSpectator: false, isAdmin: false, selectedCard: null, position: 7 }
+  ];
 
-  private readonly gameState = new BehaviorSubject<GameState | null>(null);
+  private gameState = new BehaviorSubject<GameState>({
+    players: this.defaultPlayers,
+    roomName: 'Sprint 32',
+    currentVotingSystem: ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?']
+  });
+
   gameState$ = this.gameState.asObservable();
 
-  private readonly currentUser = new BehaviorSubject<Player | null>(null);
-  currentUser$ = this.currentUser.asObservable();
-
-  setCurrentUser(user: Player) {
-    this.currentUser.next(user);
-  }
-
-  initializeGame(gameName: string, user: Player) {
-    const initialState: GameState = {
-      id: Date.now().toString(),
-      name: gameName,
-      players: [user],
-      revealed: false,
-      scoringSystem: this.defaultScoring
+  addCurrentUser(userData: { name: string; viewMode: string; isAdmin: boolean }) {
+    const currentState = this.gameState.value;
+    const newPlayer: Player = {
+      id: 'current-user',
+      name: userData.name,
+      isSpectator: userData.viewMode === 'spectator',
+      isAdmin: userData.isAdmin,
+      selectedCard: null,
+      position: 4 // Middle position
     };
-    this.gameState.next(initialState);
-    this.currentUser.next(user);
+
+    const updatedPlayers = [...this.defaultPlayers];
+    updatedPlayers.splice(4, 0, newPlayer); // Insert at position 4
+
+    this.gameState.next({
+      ...currentState,
+      players: updatedPlayers
+    });
+
+    return newPlayer.id;
   }
 
-  changeScoringSystem(system: 'default' | 'fibonacci' | 'tshirt') {
+  updatePlayerCard(playerId: string, card: string | null) {
     const currentState = this.gameState.value;
-    if (currentState) {
-      let newScoring: string[];
-      switch (system) {
-        case 'fibonacci':
-          newScoring = this.fibonacci;
-          break;
-        case 'tshirt':
-          newScoring = this.tShirt;
-          break;
-        default:
-          newScoring = this.defaultScoring;
-      }
-
-      const updatedPlayers = currentState.players.map(player => ({
-        ...player,
-        selectedCard: null
-      }));
-
-      this.updateGameState({
-        ...currentState,
-        scoringSystem: newScoring,
-        players: updatedPlayers,
-        revealed: false
-      });
-    }
+    const updatedPlayers = currentState.players.map(player =>
+      player.id === playerId ? { ...player, selectedCard: card } : player
+    );
+    
+    this.gameState.next({
+      ...currentState,
+      players: updatedPlayers
+    });
   }
 
-  selectCard(playerId: string, card: string) {
-    const currentState = this.gameState.value;
-    if (currentState) {
-      const updatedPlayers = currentState.players.map(player =>
-        player.id === playerId ? { ...player, selectedCard: card } : player
-      );
-      this.updateGameState({ ...currentState, players: updatedPlayers });
-    }
-  }
-
-  toggleReveal() {
-    const currentState = this.gameState.value;
-    if (currentState) {
-      this.updateGameState({ ...currentState, revealed: !currentState.revealed });
-    }
-  }
-
-  private updateGameState(state: GameState) {
-    this.gameState.next(state);
+  updateVotingSystem(newSystem: string[]) {
+    this.gameState.next({
+      ...this.gameState.value,
+      currentVotingSystem: newSystem
+    });
   }
 }

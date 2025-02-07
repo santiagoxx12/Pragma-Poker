@@ -1,13 +1,8 @@
 <header class="header">
-  <div class="logo">
-    <img src="assets/images/ficha-de-poker 1.svg" alt="Planning Poker" />
-  </div>
-  <h1 class="title">{{ title }}</h1>
+  <img src="assets/logo.png" alt="Planning Poker Logo" class="logo">
+  <h1 class="room-name">{{ roomName }}</h1>
   <div class="actions">
-    <button class="refresh-btn">
-      <i class="fas fa-sync-alt"></i>
-    </button>
-    <app-player-avatar [name]="playerName"></app-player-avatar>
-    <button class="invite-btn" (click)="invitePlayers()">Invitar jugadores</button>
+    <div class="user-avatar">{{ userInitials }}</div>
+    <button class="invite-button">Invitar jugadores</button>
   </div>
 </header>

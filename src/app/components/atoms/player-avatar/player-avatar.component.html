@@ -1,4 +1,13 @@
-<div class="player-avatar">
-  {{ initials }}
-  <div *ngIf="hasSelectedCard" class="indicator"></div>
+<div class="player-container">
+  <div [ngClass]="{'player-card': !isSpectator, 'spectator-avatar': isSpectator}">
+    <ng-container *ngIf="isSpectator">
+      <div class="initials">{{ getInitials() }}</div>
+    </ng-container>
+    <ng-container *ngIf="!isSpectator">
+      <div class="card-content" [class.selected]="hasSelectedCard">
+        <span *ngIf="selectedCard">{{ selectedCard }}</span>
+      </div>
+    </ng-container>
+  </div>
+  <div class="player-name">{{ name }}</div>
 </div>

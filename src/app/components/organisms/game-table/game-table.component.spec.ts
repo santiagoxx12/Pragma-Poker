@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PokerTableComponent } from './poker-table.component';
+import { GameTableComponent } from './game-table.component';
 
-describe('PokerTableComponent', () => {
-  let component: PokerTableComponent;
-  let fixture: ComponentFixture<PokerTableComponent>;
+describe('GameTableComponent', () => {
+  let component: GameTableComponent;
+  let fixture: ComponentFixture<GameTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PokerTableComponent]
+      imports: [GameTableComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PokerTableComponent);
+    fixture = TestBed.createComponent(GameTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

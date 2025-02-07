@@ -1,73 +1,61 @@
-import { Component } from '@angular/core';
-import { CreateUserModalComponent } from '../../components/organisms/create-user-modal/create-user-modal.component';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Player } from '../../interfaces/game.interface';
-import { GameService } from '../../utils/services/game.service';
-import { CardSelectorComponent } from '../../components/organisms/card-selector/card-selector.component';
+import { CreateUserModalComponent } from '../../components/organisms/create-user-modal/create-user-modal.component';
 import { GameHeaderComponent } from '../../components/molecules/game-header/game-header.component';
+import { GameTableComponent } from '../../components/organisms/game-table/game-table.component';
+import { CardSelectorComponent } from '../../components/organisms/card-selector/card-selector.component';
+import { GameService } from '../../utils/services/game.service';
+import { Player } from '../../interfaces/game.interface';
 
 @Component({
   selector: 'app-game-room',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     CreateUserModalComponent,
-    CardSelectorComponent,
-    GameHeaderComponent
+    GameHeaderComponent,
+    GameTableComponent,
+    CardSelectorComponent
   ],
   templateUrl: './game-room.component.html',
   styleUrl: './game-room.component.css'
-})
-export class GameRoomComponent {
+}) 
+export class GameRoomComponent implements OnInit {
   showUserModal = true;
-  sprintName = 'Sprint 32';
-  players: Player[] = [];
   isSpectator = false;
-  revealed = false;
-  selectedCard: string | null = null;
-  availableCards = ['0', '1', '3', '5', '8', '13', '21', '34', '55', '89', '?', '☕'];
-  playerInitials = 'LU';
+  currentUserName = '';
+  roomName = 'Sprint 32';
+  players: Player[] = [];
+  votingSystem: string[] = [];
+  currentUserId = '';
 
-  constructor(
-    private route: ActivatedRoute,
-    private gameService: GameService
-  ) {}
+  constructor(private gameService: GameService) {}
 
   ngOnInit() {
-    this.sprintName = this.route.snapshot.paramMap.get('gameName') || 'Sprint 32';
+    this.gameService.gameState$.subscribe(state => {
+      this.players = state.players;
+      this.votingSystem = state.currentVotingSystem;
+      this.roomName = state.roomName;
+    });
   }
 
-  getPlayerPosition(index: number, total: number): string {
-    const angle = (index * 360) / total;
-    const radius = 40;
-    const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
-    const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
-    return `translate(${x}%, ${y}%) translate(-50%, -50%)`;
-  }
-
-  getInitials(name: string): string {
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  }
-
-  selectCard(card: string) {
-    this.selectedCard = card;
-  }
-
-  onUserCreated(userData: { name: string; viewMode: string; isAdmin: boolean }) {
-    this.isSpectator = userData.viewMode === 'spectator';
+  onUserCreated(eventData: { name: string; viewMode: string; isAdmin: boolean }) {
+    this.isSpectator = eventData.viewMode === 'spectator';
+    this.currentUserName = eventData.name;
     this.showUserModal = false;
+    
+    localStorage.setItem('user', JSON.stringify({
+      name: eventData.name,
+      viewMode: eventData.viewMode,
+      isAdmin: eventData.isAdmin
+    }));
+    
+    this.currentUserId = this.gameService.addCurrentUser(eventData);
   }
 
-  invitePlayers() {
-    console.log('Invitar jugadores');
+  onCardSelected(card: string) {
+    if (!this.isSpectator && this.currentUserId) {
+      this.gameService.updatePlayerCard(this.currentUserId, card);
+    }
   }
-
 }

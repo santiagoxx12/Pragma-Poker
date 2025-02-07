@@ -1,23 +1,25 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-player-avatar',
   standalone: true,
-  imports:[CommonModule],
+  imports: [CommonModule],
   templateUrl: './player-avatar.component.html',
   styleUrl: './player-avatar.component.css'
+
 })
 export class PlayerAvatarComponent {
-  @Input() name: string = '';
+  @Input() name!: string;
+  @Input() isSpectator!: boolean;
+  @Input() selectedCard?: string | null;
   @Input() hasSelectedCard = false;
 
-  get initials(): string {
+  getInitials(): string {
     return this.name
       .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+      .map(word => word.charAt(0).toUpperCase())
+      .slice(0, 2)
+      .join('');
   }
 }

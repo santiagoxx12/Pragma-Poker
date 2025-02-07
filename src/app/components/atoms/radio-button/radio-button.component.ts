@@ -8,6 +8,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './radio-button.component.html',
   styleUrl: './radio-button.component.css'
+
 })
 export class RadioButtonComponent {
   @Input() label!: string;

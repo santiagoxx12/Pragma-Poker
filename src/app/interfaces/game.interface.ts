@@ -1,17 +1,14 @@
 export interface Player {
   id: string;
   name: string;
-  viewMode: 'player' | 'spectator';
+  isSpectator: boolean;
   isAdmin: boolean;
   selectedCard?: string | null;
-  avatarUrl?: string;
+  position: number;
 }
 
 export interface GameState {
-  id: string;
-  name: string;
   players: Player[];
-  revealed: boolean;
-  sprint?: string;
-  scoringSystem: string[];
+  roomName: string;
+  currentVotingSystem: string[];
 }
