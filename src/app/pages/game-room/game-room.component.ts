@@ -6,6 +6,7 @@ import { GameTableComponent } from '../../components/organisms/game-table/game-t
 import { CardSelectorComponent } from '../../components/organisms/card-selector/card-selector.component';
 import { GameService } from '../../utils/services/game.service';
 import { Player } from '../../interfaces/game.interface';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game-room',
@@ -19,7 +20,7 @@ import { Player } from '../../interfaces/game.interface';
   ],
   templateUrl: './game-room.component.html',
   styleUrl: './game-room.component.css'
-}) 
+})
 export class GameRoomComponent implements OnInit {
   showUserModal = true;
   isSpectator = false;
@@ -29,9 +30,16 @@ export class GameRoomComponent implements OnInit {
   votingSystem: string[] = [];
   currentUserId = '';
 
-  constructor(private gameService: GameService) {}
+  constructor(private readonly gameService: GameService, private readonly route: ActivatedRoute) { }
 
   ngOnInit() {
+
+    this.route.paramMap.subscribe(params => {
+      const gameName = params.get('gameName') ?? 'DefaultRoom';
+      this.roomName = gameName;
+      this.gameService.updateRoomName(gameName);
+    });
+
     this.gameService.gameState$.subscribe(state => {
       this.players = state.players;
       this.votingSystem = state.currentVotingSystem;
@@ -43,13 +51,13 @@ export class GameRoomComponent implements OnInit {
     this.isSpectator = eventData.viewMode === 'spectator';
     this.currentUserName = eventData.name;
     this.showUserModal = false;
-    
+
     localStorage.setItem('user', JSON.stringify({
       name: eventData.name,
       viewMode: eventData.viewMode,
       isAdmin: eventData.isAdmin
     }));
-    
+
     this.currentUserId = this.gameService.addCurrentUser(eventData);
   }
 

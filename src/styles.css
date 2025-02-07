@@ -12,9 +12,11 @@
 
 
 body {
-  background: radial-gradient(circle, #330072 0%, #1F0D3F 70%);
+  background: radial-gradient(circle at center, #330072 0%, #14062c 70%);
+  background-size: cover;
+  background-attachment: fixed;
   height: 100vh;
-  display: flex;
+  margin: 0;
   justify-content: center;
   align-items: center;
 }

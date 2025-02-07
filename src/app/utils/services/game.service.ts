@@ -16,11 +16,19 @@ export class GameService {
     { id: '7', name: 'Grace', isSpectator: false, isAdmin: false, selectedCard: null, position: 7 }
   ];
 
-  private gameState = new BehaviorSubject<GameState>({
+  private readonly gameState = new BehaviorSubject<GameState>({
     players: this.defaultPlayers,
     roomName: 'Sprint 32',
     currentVotingSystem: ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?']
   });
+
+  updateRoomName(newRoomName: string) {
+    this.gameState.next({
+      ...this.gameState.value,
+      roomName: newRoomName
+    });
+  }
+
 
   gameState$ = this.gameState.asObservable();
 
@@ -32,11 +40,11 @@ export class GameService {
       isSpectator: userData.viewMode === 'spectator',
       isAdmin: userData.isAdmin,
       selectedCard: null,
-      position: 4 // Middle position
+      position: 6
     };
 
-    const updatedPlayers = [...this.defaultPlayers];
-    updatedPlayers.splice(4, 0, newPlayer); // Insert at position 4
+    const updatedPlayers = [...currentState.players, newPlayer];
+
 
     this.gameState.next({
       ...currentState,
@@ -51,7 +59,7 @@ export class GameService {
     const updatedPlayers = currentState.players.map(player =>
       player.id === playerId ? { ...player, selectedCard: card } : player
     );
-    
+
     this.gameState.next({
       ...currentState,
       players: updatedPlayers

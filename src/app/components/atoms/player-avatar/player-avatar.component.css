@@ -2,42 +2,72 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .player-card {
-  width: 60px;
-  height: 90px;
+  width: 35px;
+  height: 60px;
   border: 2px solid #6B46C1;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
+  background: inherit;
+}
+
+.player-card.selected {
+  background: #BB65FF;
+  box-shadow: inset 0px 0px 8px rgba(189, 189, 255, 0.3);
+  border: 1px solid #BB65FF;
 }
 
 .spectator-avatar {
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
-  background: #E9D8FD;
+  background: #BDBDFF;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #553C9A;
-  font-weight: bold;
-}
-
-.player-name {
-  font-size: 14px;
-  color: white;
+  color: #330072;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .card-content {
-  font-size: 24px;
+  font-size: 18px;
   color: #2D3748;
 }
 
 .card-content.selected {
-  background: #E9D8FD;
+  background: #BB65FF;
+}
+
+.player-name {
+  font-size: 12px;
+  color: white;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .player-card {
+    width: 40px;
+    height: 60px;
+    border-radius: 4px;
+  }
+
+  .spectator-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 10px;
+  }
+
+  .card-content {
+    font-size: 14px;
+  }
+
+  .player-name {
+    font-size: 10px;
+  }
 }

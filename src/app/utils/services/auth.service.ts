@@ -38,6 +38,6 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.currentUserSubject.value;
+    return !!localStorage.getItem('user');
   }
 }

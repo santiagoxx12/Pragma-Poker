@@ -6,6 +6,8 @@ import { ButtonComponent } from '../../components/atoms/button/button.component'
 import { HeaderBarComponent } from '../../components/molecules/header-bar/header-bar.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { GameService } from '../../utils/services/game.service';
+import { v4 as uuidv4 } from 'uuid';
 
 interface GameForm {
   name: FormControl<string>;
@@ -29,7 +31,7 @@ export class CreateGamePageComponent {
   gameName = '';
 
 
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router, private readonly gameService: GameService) {}
 
   gameForm = new FormGroup<GameForm>({
     name: new FormControl('', {
@@ -51,11 +53,10 @@ export class CreateGamePageComponent {
 
   onGameCreate() {
     if (this.gameForm.valid) {
-      this.gameName = this.nameControl.value;
-      this.router.navigate(['/game-room', this.gameName]);
-        }
+      const gameId = uuidv4();
+      const gameName = this.nameControl.value;
+      this.router.navigate(['/game-room', `${gameName}-${gameId}`]);
+    }
   }
-
-
 
 }

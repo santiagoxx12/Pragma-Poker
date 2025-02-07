@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../utils/services/auth.service';
 
 @Component({
   selector: 'app-game-header',
@@ -12,12 +13,26 @@ export class GameHeaderComponent {
   @Input() roomName!: string;
   @Input() userName!: string;
 
+  constructor(private readonly authService: AuthService) {}
+
+
   get userInitials(): string {
-    return this.userName
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase())
-      .slice(0, 2)
-      .join('');
+    if (!this.userName) return '';
+    const words = this.userName.split(' ').filter(word => word.length > 0);
+    if (words.length > 1) {
+      return words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase();
+    } else if (words.length === 1) {
+      return words[0].substring(0, 2).toUpperCase();
+    }
+    return '';
+  }
+
+  get formattedRoomName(): string {
+    return this.roomName.split('-')[0];
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

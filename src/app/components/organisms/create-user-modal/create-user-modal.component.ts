@@ -55,18 +55,10 @@ export class CreateUserModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Obtener el nombre del usuario desde el localStorage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const user = JSON.parse(storedUser);
-      // Asignar el nombre al campo 'name' en el formulario
       this.nameControl.setValue(user.name);
-    }
-  }
-
-  onOverlayClick(event: MouseEvent) {
-    if (event.target === event.currentTarget) {
-      this.close.emit();
     }
   }
 
