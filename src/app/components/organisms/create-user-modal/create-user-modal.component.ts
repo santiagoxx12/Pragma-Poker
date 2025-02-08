@@ -63,13 +63,13 @@ export class CreateUserModalComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.userForm.valid) {
+
       this.userCreated.emit({
         name: this.nameControl.value,
         viewMode: this.viewModeControl.value,
         isAdmin: true
       });
       this.close.emit();
-    }
+
   }
 }

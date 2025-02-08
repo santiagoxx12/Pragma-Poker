@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlayerAvatarComponent } from './player-avatar.component';
+import { CommonModule } from '@angular/common';
 
 describe('PlayerAvatarComponent', () => {
   let component: PlayerAvatarComponent;
@@ -8,7 +9,7 @@ describe('PlayerAvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PlayerAvatarComponent]
+      imports: [PlayerAvatarComponent, CommonModule]
     })
     .compileComponents();
 

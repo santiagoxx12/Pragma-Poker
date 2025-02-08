@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { GameService } from './game.service';
 
 export interface User {
   name: string;
@@ -14,7 +15,7 @@ export class AuthService {
   private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private readonly router: Router) {
+  constructor(private readonly router: Router, private readonly gameService: GameService) {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       this.currentUserSubject.next(JSON.parse(storedUser));
@@ -30,6 +31,9 @@ export class AuthService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSubject.next(null);
+
+    this.gameService.resetGameState();
+
     this.router.navigate(['/login']);
   }
 
@@ -38,6 +42,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('user');
+    return this.currentUserSubject.value !== null;
   }
+
 }

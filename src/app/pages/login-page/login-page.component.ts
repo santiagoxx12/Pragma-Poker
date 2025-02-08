@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../../utils/services/auth.service';
 import { RadioButtonComponent } from '../../components/atoms/radio-button/radio-button.component'; // Asegúrate de que la ruta es correcta
 import { ButtonComponent } from '../../components/atoms/button/button.component';
 import { InputFieldComponent } from '../../components/atoms/input-field/input-field.component';
@@ -46,7 +45,7 @@ export class LoginPageComponent {
     })
   });
 
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   get nameControl() {
     return this.loginForm.controls.name;
