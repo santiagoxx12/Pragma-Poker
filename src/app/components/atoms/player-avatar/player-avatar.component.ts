@@ -16,12 +16,14 @@ export class PlayerAvatarComponent {
   @Input() hasSelectedCard = false;
 
   getInitials(): string {
+    if (!this.name) return '';
     const words = this.name.split(' ').filter(word => word.length > 0);
     if (words.length > 1) {
       return words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase();
-    } else {
+    } else if (words.length === 1) {
       return words[0].substring(0, 2).toUpperCase();
     }
+    return '';
   }
 
 }
