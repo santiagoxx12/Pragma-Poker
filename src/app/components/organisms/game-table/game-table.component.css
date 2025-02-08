@@ -2,48 +2,51 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
-  max-width: 1200px;
-  padding: 20px;
-  margin: 2rem auto 0 auto;
+  width: 95%;
+  padding: 10px;
+  margin: 1rem auto 0 auto;
 }
 
 .top-players, .bottom-players {
   display: flex;
   justify-content: center;
-  gap: 10%;
+  gap: 16px;
   width: 100%;
   flex-wrap: wrap;
+  margin:1rem;
+
 }
 
 .middle-section {
   display: grid;
-  grid-template-columns: 80px minmax(400px, 1fr) 80px;
+  grid-template-columns: 80px 250px 80px;
   align-items: center;
   justify-content: center;
-  width: 70%;
-  max-width: 1200px;
-  position: relative;
+  width: 100%;
+  gap: 8px;
+  margin: 24px 0;
 }
 
 .left-player, .right-player {
   display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 400px;
+  justify-content: space-around;
   align-items: center;
-  justify-content: center;
 }
 
 .table-oval {
-  width: 100%;
-  max-width: 480px;
-  height: 250px;
-  border-radius: 276px;
+  width: 90%;
+  height: 400px;
+  border-radius: 200px;
   background: #1f0d3f62;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  margin: 3rem auto;
   border: 1px solid #6429CD;
+  margin: 0 auto;
   box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.12);
 }
 
@@ -51,19 +54,15 @@
 .table-oval::after {
   content: "";
   position: absolute;
-  inset: -15px;
-  border-radius: 276px;
+  inset: -10px;
+  border-radius: inherit;
   border: 2px solid #6429CD;
   z-index: -1;
   box-shadow: inset 0px 0px 8px rgba(189, 189, 255, 0.3);
-
 }
 
 .table-oval::after {
-  inset: -30px;
-  border: 2px solid #6429CD;
-  box-shadow: inset 0px 0px 8px rgba(189, 189, 255, 0.3);
-
+  inset: -20px;
 }
 
 app-player-avatar {
@@ -74,40 +73,73 @@ app-player-avatar {
   text-align: center;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .game-table {
-    width: 95%;
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    max-width: 1200px;
+    margin: 2rem auto;
   }
 
   .middle-section {
-    grid-template-columns: 60px 1fr 60px;
-    gap: 10px;
-    justify-items: center;
+    display: grid;
+    grid-template-columns: 1fr minmax(400px, 1fr) 1fr;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    position: relative;
+    margin: 3rem auto;
   }
 
-  .table-oval {
-    max-width: 300px;
-    height: 150px;
-    border-radius: 20px;
-  }
-
-  .table-oval::before {
-    inset: -3px;
-    border-radius: 20px;
-  }
-
-  .table-oval::after {
-    inset: -6px;
-    border-radius: 20px;
+  .top-players, .bottom-players {
+    gap: 10%;
   }
 
   .left-player, .right-player {
     flex-direction: row;
-    gap: 10px;
+    height: auto;
+    gap: initial;
+    justify-content: center;
   }
 
-  .top-players, .bottom-players {
-    gap: 10px;
+  .table-oval {
+    width: 100%;
+    max-width: 600px;
+    height: 250px;
+    border-radius: 276px;
+  }
+
+  .table-oval::before {
+    inset: -15px;
+    border-radius: 276px;
+  }
+
+  .table-oval::after {
+    inset: -30px;
+    border-radius: 276px;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .middle-section {
+    grid-template-columns: minmax(50px, 60px) minmax(180px, 200px) minmax(50px, 60px);
+    gap: 2px;
+  }
+
+  .table-oval {
+    width: 80%;
+    height: 400px;
+    border-radius: 120px;
+    margin: 0 auto;
+  }
+
+  .left-player, .right-player {
+    min-height: 250px;
+    gap: 12px;
   }
 }

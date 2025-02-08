@@ -3,11 +3,12 @@
   <h1 class="room-name">{{ formattedRoomName }}</h1>
   <div class="actions">
     <div class="user-avatar">{{ userInitials }}</div>
-    <button class="invite-button">Invitar jugadores</button>
-
+    <button class="invite-button">
+      <i class="fa fa-share-alt"></i>
+      <span class="invite-text">Invitar jugadores</span>
+    </button>
     <button (click)="logout()" class="logout-btn">
       <i class="fa fa-sign-out" aria-hidden="true"></i>
     </button>
-
   </div>
 </header>
