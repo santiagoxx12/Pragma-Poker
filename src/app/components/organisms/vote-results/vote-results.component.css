@@ -1,0 +1,61 @@
+.vote-results {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    background: rgba(100, 41, 205, 0.1);
+    border-radius: 12px;
+    margin: 16px;
+  }
+
+  .title {
+    color: white;
+    font-size: 20px;
+    margin: 0;
+  }
+
+  .cards-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .vote-card {
+    background: #6429CD;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 80px;
+    color: white;
+  }
+
+  .card-value {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .vote-count {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  .average-container {
+    background: #BB65FF;
+    padding: 16px 32px;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+  }
+
+  .average-label {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .average-value {
+    font-size: 32px;
+    font-weight: bold;
+  }

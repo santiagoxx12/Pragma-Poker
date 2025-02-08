@@ -12,8 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   declarations: [
     AppComponent,
     LogoComponent,
-    SplashScreenComponent,
-
+    SplashScreenComponent
   ],
   imports: [
     BrowserModule,

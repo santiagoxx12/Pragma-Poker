@@ -5,8 +5,9 @@ import { GameHeaderComponent } from '../../components/molecules/game-header/game
 import { GameTableComponent } from '../../components/organisms/game-table/game-table.component';
 import { CardSelectorComponent } from '../../components/organisms/card-selector/card-selector.component';
 import { GameService } from '../../utils/services/game.service';
-import { Player } from '../../interfaces/game.interface';
+import { GameState, Player } from '../../interfaces/game.interface';
 import { ActivatedRoute } from '@angular/router';
+import { VoteResultsComponent } from '../../components/organisms/vote-results/vote-results.component';
 
 @Component({
   selector: 'app-game-room',
@@ -16,7 +17,8 @@ import { ActivatedRoute } from '@angular/router';
     CreateUserModalComponent,
     GameHeaderComponent,
     GameTableComponent,
-    CardSelectorComponent
+    CardSelectorComponent,
+    VoteResultsComponent
   ],
   templateUrl: './game-room.component.html',
   styleUrl: './game-room.component.css'
@@ -29,12 +31,24 @@ export class GameRoomComponent implements OnInit {
   players: Player[] = [];
   votingSystem: string[] = [];
   currentUserId = '';
+  gameState: GameState;
 
   constructor(
     private readonly gameService: GameService,
     private readonly route: ActivatedRoute
-  ) {}
-
+  ) {
+    this.gameState = {
+      players: [],
+      roomName: '',
+      currentVotingSystem: [],
+      selectedCards: {},
+      isVotingEnabled: true,
+      isRevealing: false,
+      averageVote: null,
+      voteCount: {}
+    };
+  }
+ 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const gameName = params.get('gameName') ?? 'DefaultRoom';
@@ -46,6 +60,7 @@ export class GameRoomComponent implements OnInit {
       this.players = state.players;
       this.votingSystem = state.currentVotingSystem;
       this.roomName = state.roomName;
+      this.gameState = state;
     });
   }
 

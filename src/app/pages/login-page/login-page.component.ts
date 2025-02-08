@@ -6,6 +6,7 @@ import { ButtonComponent } from '../../components/atoms/button/button.component'
 import { InputFieldComponent } from '../../components/atoms/input-field/input-field.component';
 import { Router } from '@angular/router';
 import { maxThreeNumbersValidator, onlyNumbersValidator } from '../../utils/validators/game-name.validator';
+import { AuthService } from '../../utils/services/auth.service';
 
 
 interface LoginForm {
@@ -45,7 +46,7 @@ export class LoginPageComponent {
     })
   });
 
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router, private readonly authService: AuthService) {}
 
   get nameControl() {
     return this.loginForm.controls.name;
@@ -62,9 +63,9 @@ export class LoginPageComponent {
         role: this.roleControl.value
       };
 
-      localStorage.setItem('user', JSON.stringify(userData));
+      this.authService.login(userData);
 
-      this.router.navigate(['/create-game']);
+      // this.router.navigate(['/create-game']);
     }
   }
 }

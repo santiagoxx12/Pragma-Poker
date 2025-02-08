@@ -13,4 +13,7 @@ export interface GameState {
   currentVotingSystem: string[];
   selectedCards: { [playerId: string]: string };
   isVotingEnabled: boolean;
+  isRevealing: boolean;
+  averageVote: number | null;
+  voteCount: { [card: string]: number };
 }

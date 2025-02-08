@@ -20,6 +20,7 @@ export class AuthService {
     if (storedUser) {
       this.currentUserSubject.next(JSON.parse(storedUser));
     }
+    
   }
 
   login(user: User) {
@@ -36,7 +37,7 @@ export class AuthService {
 
     this.router.navigate(['/login']);
   }
-
+  
   isAdmin(): boolean {
     return this.currentUserSubject.value?.role === 'admin';
   }

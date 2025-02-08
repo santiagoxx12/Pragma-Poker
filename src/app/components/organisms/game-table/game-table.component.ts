@@ -1,7 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerAvatarComponent } from '../../atoms/player-avatar/player-avatar.component';
-import { Player } from '../../../interfaces/game.interface';
+import { GameState, Player } from '../../../interfaces/game.interface';
+import { GameService } from '../../../utils/services/game.service';
+import { AuthService } from '../../../utils/services/auth.service';
+import { combineLatest, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-game-table',
@@ -12,6 +15,54 @@ import { Player } from '../../../interfaces/game.interface';
 })
 export class GameTableComponent {
   @Input() players: Player[] = [];
+  gameState: GameState;
+  isAdmin$!: Observable<boolean>;
+  isButtonEnabled$!: Observable<boolean>;
+  shouldShowRevealButton$: Observable<boolean>;
+
+
+
+  ngOnInit() {
+    this.isButtonEnabled$ = combineLatest([
+      this.authService.currentUser$.pipe(map(user => user?.role === 'admin')),
+      this.gameService.gameState$
+    ]).pipe(
+      map(([isAdmin, gameState]) => {
+        return isAdmin || this.gameService.isAllPlayersVoted();
+      })
+    );
+  }
+
+  constructor(
+    private readonly gameService: GameService,
+    private  readonly authService: AuthService
+
+  ) {
+    this.gameState = {
+      players: [],
+      roomName: '',
+      currentVotingSystem: [],
+      selectedCards: {},
+      isVotingEnabled: true,
+      isRevealing: false,
+      averageVote: null,
+      voteCount: {}
+    };
+    this.isAdmin$ = this.authService.currentUser$.pipe(
+      map(user => user?.role === 'admin')
+    );
+    
+    this.shouldShowRevealButton$ = this.gameService.gameState$.pipe(
+      map(state => {
+        const nonSpectators = state.players.filter(player => !player.isSpectator);
+        return nonSpectators.every(player => !!state.selectedCards[player.id]);
+      })
+    );
+    
+    this.gameService.gameState$.subscribe(state => {
+      this.gameState = state;
+    });
+  }
 
   get topPlayers(): Player[] {
     return this.players.filter(p => p.position <= 2);
@@ -29,5 +80,9 @@ export class GameTableComponent {
 
   get rightPlayer(): Player | undefined {
     return this.players.find(p => p.position === 5);
+  }
+
+  onRevealCards() {
+    this.gameService.revealCards();
   }
 }

@@ -14,6 +14,7 @@ export class PlayerAvatarComponent {
   @Input() isSpectator!: boolean;
   @Input() selectedCard?: string | null;
   @Input() hasSelectedCard = false;
+  @Input() showCard = false;
 
   getInitials(): string {
     if (!this.name) return '';

@@ -21,7 +21,10 @@ export class GameService {
     roomName: 'Sprint 32',
     currentVotingSystem: ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?', '☕'],
     selectedCards: {},
-    isVotingEnabled: true
+    isVotingEnabled: true,
+    isRevealing: false,
+    averageVote: null,
+    voteCount: {}
   });
 
   gameState$ = this.gameState.asObservable();
@@ -31,6 +34,47 @@ export class GameService {
       ...this.gameState.value,
       roomName: newRoomName
     });
+  }
+
+  updateGameState(newState: Partial<GameState>) {
+    this.gameState.next({
+      ...this.gameState.value,
+      ...newState
+    });
+  }
+
+  revealCards() {
+    const currentState = this.gameState.value;
+    
+    this.updateGameState({ isRevealing: true });
+
+    this.gameState.next({
+      ...currentState,
+      isRevealing: true
+    });
+
+    setTimeout(() => {
+      const players = currentState.players;
+      const voteCount: { [key: string]: number } = {};
+      let sum = 0;
+      let count = 0;
+
+      players.forEach(player => {
+        if (!player.isSpectator && player.selectedCard && player.selectedCard !== '?' && player.selectedCard !== '☕') {
+          const card = player.selectedCard;
+          voteCount[card] = (voteCount[card] || 0) + 1;
+          sum += parseFloat(card);
+          count++;
+        }
+      });
+
+      this.updateGameState({
+        isRevealing: false,
+        isVotingEnabled: false,
+        averageVote: count > 0 ? sum / count : null,
+        voteCount
+      });
+    }, 2000);
   }
 
   addCurrentUser(userData: { name: string; viewMode: string; isAdmin: boolean }) {
@@ -136,13 +180,24 @@ export class GameService {
     console.log('Cartas seleccionadas: ', this.gameState.value.selectedCards);
   }
 
+  isAllPlayersVoted(): boolean {
+    const { players, selectedCards } = this.gameState.value;
+    const nonSpectators = players.filter(player => !player.isSpectator);
+    
+    return nonSpectators.length > 0 && nonSpectators.every(player => selectedCards[player.id] !== undefined && selectedCards[player.id] !== null);
+  }
+  
+
   resetGameState() {
     this.gameState.next({
       players: [...this.defaultPlayers],
       roomName: 'Sprint 32',
       currentVotingSystem: ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?', '☕'],
       selectedCards: {},
-      isVotingEnabled: true
+      isVotingEnabled: true,
+      isRevealing: false,  
+      averageVote: null,   
+      voteCount: {}       
     });
   }
 }

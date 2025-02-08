@@ -1,0 +1,14 @@
+<div class="vote-results">
+    <h3 class="title">Resultados de la votación</h3>
+    <div class="cards-summary">
+      <div *ngFor="let vote of votesArray" class="vote-card">
+        <div class="card-value">{{vote.card}}</div>
+        <div class="vote-count">{{vote.count}} votos</div>
+      </div>
+    </div>
+    
+    <div class="average-container" *ngIf="averageVote !== null">
+      <div class="average-label">Promedio</div>
+      <div class="average-value">{{averageVote.toFixed(1)}}</div>
+    </div>
+  </div>

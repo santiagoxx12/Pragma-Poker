@@ -1,13 +1,14 @@
-<div class="player-container">
-  <div [ngClass]="{'player-card': !isSpectator, 'spectator-avatar': isSpectator, 'selected': hasSelectedCard}">
-    <ng-container *ngIf="isSpectator">
-      <div class="initials">{{ getInitials() }}</div>
-    </ng-container>
-    <ng-container *ngIf="!isSpectator">
-      <div class="card-content">
-        <span *ngIf="false">{{ selectedCard }}</span> <!-- Oculta el número -->
+ <div class="player-container">
+      <div [ngClass]="{'player-card': !isSpectator, 'spectator-avatar': isSpectator, 'selected': hasSelectedCard}">
+        <ng-container *ngIf="isSpectator">
+          <div class="initials">{{ getInitials() }}</div>
+        </ng-container>
+        <ng-container *ngIf="!isSpectator">
+          <div class="card-content">
+            <span *ngIf="showCard">{{ selectedCard }}</span>
+            <span *ngIf="!showCard && hasSelectedCard"></span>
+          </div>
+        </ng-container>
       </div>
-    </ng-container>
-  </div>
-  <div class="player-name">{{ name }}</div>
-</div>
+      <div class="player-name">{{ name }}</div>
+    </div>

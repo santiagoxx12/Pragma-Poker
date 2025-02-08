@@ -1,11 +1,11 @@
 <div class="game-table">
-
   <div class="top-players">
     <app-player-avatar *ngFor="let player of topPlayers"
       [name]="player.name"
       [isSpectator]="player.isSpectator"
       [selectedCard]="player.selectedCard"
-      [hasSelectedCard]="!!player.selectedCard">
+      [hasSelectedCard]="!!player.selectedCard"
+      [showCard]="!gameState.isVotingEnabled">
     </app-player-avatar>
   </div>
 
@@ -15,18 +15,36 @@
         [name]="leftPlayer.name"
         [isSpectator]="leftPlayer.isSpectator"
         [selectedCard]="leftPlayer.selectedCard"
-        [hasSelectedCard]="!!leftPlayer.selectedCard">
+        [hasSelectedCard]="!!leftPlayer.selectedCard"
+        [showCard]="!gameState.isVotingEnabled">
       </app-player-avatar>
     </div>
 
-    <div class="table-oval"></div>
+    <div class="table-oval">
+      <ng-container *ngIf="shouldShowRevealButton$ | async">
+        <button 
+          (click)="onRevealCards()"
+          [disabled]="!(isButtonEnabled$ | async)"
+          class="reveal-button"
+        >
+          {{ (gameState.isRevealing ? 'Contando votos...' : 'Revelar cartas') }}
+        </button>
+      </ng-container>
+
+      
+      <div *ngIf="gameState.isRevealing" class="loading-state">
+        <div class="spinner"></div>
+        <p>Contando votos...</p>
+      </div>
+    </div>
 
     <div class="right-player">
       <app-player-avatar *ngIf="rightPlayer"
         [name]="rightPlayer.name"
         [isSpectator]="rightPlayer.isSpectator"
         [selectedCard]="rightPlayer.selectedCard"
-        [hasSelectedCard]="!!rightPlayer.selectedCard">
+        [hasSelectedCard]="!!rightPlayer.selectedCard"
+        [showCard]="!gameState.isVotingEnabled">
       </app-player-avatar>
     </div>
   </div>
@@ -36,7 +54,8 @@
       [name]="player.name"
       [isSpectator]="player.isSpectator"
       [selectedCard]="player.selectedCard"
-      [hasSelectedCard]="!!player.selectedCard">
+      [hasSelectedCard]="!!player.selectedCard"
+      [showCard]="!gameState.isVotingEnabled">
     </app-player-avatar>
   </div>
 </div>
