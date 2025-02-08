@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Player, GameState } from '../../interfaces/game.interface';
+import { GameState, Player } from '../../interfaces/game.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +17,14 @@ export class GameService {
   ];
 
   private readonly gameState = new BehaviorSubject<GameState>({
-    players: this.defaultPlayers,
+    players: [...this.defaultPlayers],
     roomName: 'Sprint 32',
-    currentVotingSystem: ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?']
+    currentVotingSystem: ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?', '☕'],
+    selectedCards: {},
+    isVotingEnabled: true
   });
+
+  gameState$ = this.gameState.asObservable();
 
   updateRoomName(newRoomName: string) {
     this.gameState.next({
@@ -28,9 +32,6 @@ export class GameService {
       roomName: newRoomName
     });
   }
-
-
-  gameState$ = this.gameState.asObservable();
 
   addCurrentUser(userData: { name: string; viewMode: string; isAdmin: boolean }) {
     const currentState = this.gameState.value;
@@ -45,7 +46,6 @@ export class GameService {
 
     const updatedPlayers = [...currentState.players, newPlayer];
 
-
     this.gameState.next({
       ...currentState,
       players: updatedPlayers
@@ -54,31 +54,95 @@ export class GameService {
     return newPlayer.id;
   }
 
-  updatePlayerCard(playerId: string, card: string | null) {
+  selectCard(playerId: string, card: string) {
+    if (!this.gameState.value.isVotingEnabled) {
+      return;
+    }
+
+    const currentState = this.gameState.value;
+    const player = currentState.players.find(p => p.id === playerId);
+
+    if (!player || player.isSpectator) {
+      return;
+    }
+
+    this.updatePlayerCard(playerId, card);
+    this.triggerDefaultPlayersSelection();
+    this.printSelectedCards();
+  }
+
+  triggerDefaultPlayersSelection() {
+    const currentState = this.gameState.value;
+    const defaultPlayers = currentState.players.filter(p =>
+      !p.isSpectator && p.id !== 'current-user' && p.id !== undefined
+    );
+
+    defaultPlayers.forEach(player => {
+      const delay = Math.random() * 2000 + 1000;
+
+      setTimeout(() => {
+        const randomCard = this.getRandomCard(currentState.currentVotingSystem, player.id);
+        this.updatePlayerCard(player.id, randomCard);
+        this.printSelectedCards();
+      }, delay);
+    });
+  }
+
+  private getRandomCard(votingSystem: string[], playerId: string): string {
+    const numericalCards = votingSystem.filter(card => card !== '?' && card !== '☕');
+
+    if (Math.random() < 0.1) {
+      return '?';
+    }
+
+    if (Math.random() < 0.05) {
+      return '☕';
+    }
+
+    const previousCard = this.gameState.value.players.find(p => p.id === playerId)?.selectedCard;
+    let availableCards = [...numericalCards];
+
+    if (previousCard) {
+      availableCards = availableCards.filter(card => card !== previousCard);
+    }
+
+    return availableCards[Math.floor(Math.random() * availableCards.length)];
+  }
+
+  private updatePlayerCard(playerId: string, card: string | null) {
     const currentState = this.gameState.value;
     const updatedPlayers = currentState.players.map(player =>
       player.id === playerId ? { ...player, selectedCard: card } : player
     );
 
+    const updatedSelectedCards = {
+      ...currentState.selectedCards
+    };
+
+    if (card !== null) {
+      updatedSelectedCards[playerId] = card;
+    } else {
+      delete updatedSelectedCards[playerId];
+    }
+
     this.gameState.next({
       ...currentState,
-      players: updatedPlayers
+      players: updatedPlayers,
+      selectedCards: updatedSelectedCards
     });
   }
 
-  updateVotingSystem(newSystem: string[]) {
-    this.gameState.next({
-      ...this.gameState.value,
-      currentVotingSystem: newSystem
-    });
+  private printSelectedCards() {
+    console.log('Cartas seleccionadas: ', this.gameState.value.selectedCards);
   }
 
   resetGameState() {
     this.gameState.next({
-      players: [...this.defaultPlayers], 
+      players: [...this.defaultPlayers],
       roomName: 'Sprint 32',
-      currentVotingSystem: ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?']
+      currentVotingSystem: ['0', '1', '2', '3', '5', '8', '13', '21', '34', '55', '89', '?', '☕'],
+      selectedCards: {},
+      isVotingEnabled: true
     });
   }
-
 }

@@ -1,3 +1,18 @@
+<!-- <div class="card-selector">
+  <h3 class="title">Elige una carta 👇</h3>
+  <div class="cards-wrapper">
+    <div class="cards-container">
+      <button *ngFor="let card of cards"
+              class="card"
+              [class.selected]="selectedCard === card"
+              (click)="selectCard(card)">
+        {{ card }}
+      </button>
+    </div>
+  </div>
+</div> -->
+
+
 <div class="card-selector">
   <h3 class="title">Elige una carta 👇</h3>
   <div class="cards-wrapper">
@@ -9,5 +24,8 @@
         {{ card }}
       </button>
     </div>
+  </div>
+  <div *ngIf="cards.length === 0" class="no-cards-message">
+    No hay cartas registradas
   </div>
 </div>

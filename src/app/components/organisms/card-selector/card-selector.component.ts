@@ -17,4 +17,5 @@ export class CardSelectorComponent {
     this.selectedCard = card;
     this.cardSelected.emit(card);
   }
+
 }

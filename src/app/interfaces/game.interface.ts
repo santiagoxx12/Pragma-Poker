@@ -11,4 +11,6 @@ export interface GameState {
   players: Player[];
   roomName: string;
   currentVotingSystem: string[];
+  selectedCards: { [playerId: string]: string };
+  isVotingEnabled: boolean;
 }

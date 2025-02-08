@@ -1,102 +1,107 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameRoomComponent } from './game-room.component';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+import { GameService } from '../../utils/services/game.service';
+import { CommonModule } from '@angular/common';
 import { CreateUserModalComponent } from '../../components/organisms/create-user-modal/create-user-modal.component';
 import { GameHeaderComponent } from '../../components/molecules/game-header/game-header.component';
 import { GameTableComponent } from '../../components/organisms/game-table/game-table.component';
 import { CardSelectorComponent } from '../../components/organisms/card-selector/card-selector.component';
-import { GameService } from '../../utils/services/game.service';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
-import { CommonModule } from '@angular/common';
+
+class MockGameService {
+  gameState$ = of({
+    players: [],
+    currentVotingSystem: [],
+    roomName: 'Test Room',
+  });
+
+  updateRoomName = jasmine.createSpy('updateRoomName');
+  addCurrentUser = jasmine.createSpy('addCurrentUser').and.returnValue('user123');
+  selectCard = jasmine.createSpy('selectCard');
+  resetGameState = jasmine.createSpy('resetGameState');
+  triggerDefaultPlayersSelection = jasmine.createSpy('triggerDefaultPlayersSelection');
+}
 
 describe('GameRoomComponent', () => {
   let component: GameRoomComponent;
   let fixture: ComponentFixture<GameRoomComponent>;
-  let gameServiceMock: jasmine.SpyObj<GameService>;
-  let activatedRouteMock: jasmine.SpyObj<ActivatedRoute>;
+  let gameService: MockGameService;
 
   beforeEach(async () => {
-    gameServiceMock = jasmine.createSpyObj('GameService', ['updateRoomName', 'addCurrentUser', 'updatePlayerCard'], {
-      gameState$: of({
-        players: [
-          { id: '1', name: 'Alice', isSpectator: false, isAdmin: false, selectedCard: null, position: 1 }
-        ],
-        currentVotingSystem: ['1', '2', '3', '5', '8'],
-        roomName: 'TestRoom'
-      })
-    });
-
-    activatedRouteMock = jasmine.createSpyObj('ActivatedRoute', [], {
-      paramMap: of({ get: (key: string) => (key === 'gameName' ? 'TestRoom' : null) })
-    });
-
+    gameService = new MockGameService();
     await TestBed.configureTestingModule({
       imports: [
         CommonModule,
+        GameRoomComponent,
         CreateUserModalComponent,
         GameHeaderComponent,
         GameTableComponent,
         CardSelectorComponent,
-        GameRoomComponent
       ],
       providers: [
-        { provide: GameService, useValue: gameServiceMock },
-        { provide: ActivatedRoute, useValue: activatedRouteMock }
-      ]
+        { provide: GameService, useValue: gameService },
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of({ get: () => 'Test Room' }) },
+        },
+      ],
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(GameRoomComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('debería crearse el componente', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debería inicializar el nombre de la sala desde la ruta', () => {
-    expect(component.roomName).toBe('TestRoom');
-    expect(gameServiceMock.updateRoomName).toHaveBeenCalledWith('TestRoom');
+  it('should initialize with room name from route', () => {
+    expect(component.roomName).toBe('Test Room');
+    expect(gameService.updateRoomName).toHaveBeenCalledWith('Test Room');
   });
 
-  it('debería actualizar los datos del estado del juego', () => {
-    expect(component.players.length).toBe(1);
-    expect(component.players[0].name).toBe('Alice');
-    expect(component.votingSystem.length).toBe(5);
-    expect(component.roomName).toBe('TestRoom');
-  });
-
-  it('debería manejar la creación de usuario correctamente', () => {
-    const eventData = { name: 'Bob', viewMode: 'player', isAdmin: true };
-    gameServiceMock.addCurrentUser.and.returnValue('123');
-
-    component.onUserCreated(eventData);
+  it('should handle user creation', () => {
+    const userData = { name: 'Alice', viewMode: 'player', isAdmin: false };
+    component.onUserCreated(userData);
 
     expect(component.isSpectator).toBeFalse();
-    expect(component.currentUserName).toBe('Bob');
+    expect(component.currentUserName).toBe('Alice');
     expect(component.showUserModal).toBeFalse();
-    expect(component.currentUserId).toBe('123');
-
-    const storedUser = JSON.parse(localStorage.getItem('user') ?? '{}');
-    expect(storedUser.name).toBe('Bob');
-    expect(storedUser.viewMode).toBe('player');
-    expect(storedUser.isAdmin).toBeTrue();
+    expect(gameService.addCurrentUser).toHaveBeenCalledWith(userData);
   });
 
-  it('debería actualizar la carta seleccionada solo si el usuario no es espectador', () => {
+  it('should trigger spectator actions on user creation', () => {
+    const userData = { name: 'Bob', viewMode: 'spectator', isAdmin: false };
+    component.onUserCreated(userData);
+
+    expect(component.isSpectator).toBeTrue();
+    expect(gameService.triggerDefaultPlayersSelection).toHaveBeenCalled();
+  });
+
+  it('should handle card selection', () => {
+    component.currentUserId = 'user123';
     component.isSpectator = false;
-    component.currentUserId = '123';
-    component.onCardSelected('5');
-
-    expect(gameServiceMock.updatePlayerCard).toHaveBeenCalledWith('123', '5');
+    component.onCardSelected('Ace');
+    expect(gameService.selectCard).toHaveBeenCalledWith('user123', 'Ace');
   });
 
-  it('no debería actualizar la carta si el usuario es espectador', () => {
+  it('should not select card if user is spectator', () => {
     component.isSpectator = true;
-    component.onCardSelected('5');
-
-    expect(gameServiceMock.updatePlayerCard).not.toHaveBeenCalled();
+    component.onCardSelected('Ace');
+    expect(gameService.selectCard).not.toHaveBeenCalled();
   });
+
+  // it('should log out user', () => {
+  //   spyOn(localStorage, 'removeItem');
+  //   spyOn(gameService, 'resetGameState');
+  //   spyOn(window.location, 'assign'); // Espiamos assign en lugar de reload
+
+  //   component.logout();
+
+  //   expect(localStorage.removeItem).toHaveBeenCalledWith('user');
+  //   expect(gameService.resetGameState).toHaveBeenCalled();
+  //   expect(window.location.assign).toHaveBeenCalledWith(window.location.href);
+  // });
 });

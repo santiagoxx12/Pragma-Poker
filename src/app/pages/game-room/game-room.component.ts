@@ -30,10 +30,12 @@ export class GameRoomComponent implements OnInit {
   votingSystem: string[] = [];
   currentUserId = '';
 
-  constructor(private readonly gameService: GameService, private readonly route: ActivatedRoute) { }
+  constructor(
+    private readonly gameService: GameService,
+    private readonly route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-
     this.route.paramMap.subscribe(params => {
       const gameName = params.get('gameName') ?? 'DefaultRoom';
       this.roomName = gameName;
@@ -52,18 +54,24 @@ export class GameRoomComponent implements OnInit {
     this.currentUserName = eventData.name;
     this.showUserModal = false;
 
-    localStorage.setItem('user', JSON.stringify({
-      name: eventData.name,
-      viewMode: eventData.viewMode,
-      isAdmin: eventData.isAdmin
-    }));
+    localStorage.setItem('user', JSON.stringify(eventData));
 
     this.currentUserId = this.gameService.addCurrentUser(eventData);
+
+    if (this.isSpectator) {
+      this.gameService.triggerDefaultPlayersSelection();
+    }
   }
 
   onCardSelected(card: string) {
     if (!this.isSpectator && this.currentUserId) {
-      this.gameService.updatePlayerCard(this.currentUserId, card);
+      this.gameService.selectCard(this.currentUserId, card);
     }
   }
+
+  logout() {
+    localStorage.removeItem('user');
+    this.gameService.resetGameState();
+    window.location.assign(window.location.href);
+    }
 }
