@@ -14,17 +14,15 @@
     [players]="players">
   </app-game-table>
 
-  <ng-container *ngIf="!isSpectator">
     <app-card-selector
-      *ngIf="gameState.isVotingEnabled"
-      [cards]="votingSystem"
-      (cardSelected)="onCardSelected($event)">
-    </app-card-selector>
+    *ngIf="!isSpectator && gameState.isVotingEnabled"
+    [cards]="votingSystem"
+    (cardSelected)="onCardSelected($event)">
+  </app-card-selector>
 
-    <app-vote-results
-      *ngIf="!gameState.isVotingEnabled"
-      [voteCount]="gameState.voteCount"
-      [averageVote]="gameState.averageVote">
-    </app-vote-results>
-  </ng-container>
+  <app-vote-results
+    *ngIf="!gameState.isVotingEnabled"
+    [voteCount]="gameState.voteCount"
+    [averageVote]="gameState.averageVote">
+  </app-vote-results>
 </div>

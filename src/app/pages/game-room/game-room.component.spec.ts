@@ -93,15 +93,4 @@ describe('GameRoomComponent', () => {
     expect(gameService.selectCard).not.toHaveBeenCalled();
   });
 
-  // it('should log out user', () => {
-  //   spyOn(localStorage, 'removeItem');
-  //   spyOn(gameService, 'resetGameState');
-  //   spyOn(window.location, 'assign'); // Espiamos assign en lugar de reload
-
-  //   component.logout();
-
-  //   expect(localStorage.removeItem).toHaveBeenCalledWith('user');
-  //   expect(gameService.resetGameState).toHaveBeenCalled();
-  //   expect(window.location.assign).toHaveBeenCalledWith(window.location.href);
-  // });
 });

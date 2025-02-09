@@ -1,6 +1,7 @@
 export interface User {
-  id: string;
+  id?: string;
   name: string;
-  viewMode: 'player' | 'spectator';
-  isAdmin: boolean;
+  role: 'admin' | 'player';
+  viewMode?: 'player' | 'spectator';
+  isAdmin?: boolean;
 }

@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { AuthService, User } from './auth.service';
+import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { GameService } from './game.service';
+import { User } from '../../interfaces/user.interface';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -90,7 +91,7 @@ describe('AuthService', () => {
     expect(service.isAuthenticated()).toBeFalse();
   });
 
-  
+
 
 
 });

@@ -1,61 +1,87 @@
 <div class="game-table">
   <div class="top-players">
-    <app-player-avatar *ngFor="let player of topPlayers"
+    <app-player-avatar
+      *ngFor="let player of topPlayers"
       [name]="player.name"
       [isSpectator]="player.isSpectator"
       [selectedCard]="player.selectedCard"
       [hasSelectedCard]="!!player.selectedCard"
-      [showCard]="!gameState.isVotingEnabled">
+      [showCard]="!gameState.isVotingEnabled"
+    >
     </app-player-avatar>
   </div>
 
   <div class="middle-section">
     <div class="left-player">
-      <app-player-avatar *ngIf="leftPlayer"
+      <app-player-avatar
+        *ngIf="leftPlayer"
         [name]="leftPlayer.name"
         [isSpectator]="leftPlayer.isSpectator"
         [selectedCard]="leftPlayer.selectedCard"
         [hasSelectedCard]="!!leftPlayer.selectedCard"
-        [showCard]="!gameState.isVotingEnabled">
+        [showCard]="!gameState.isVotingEnabled"
+      >
       </app-player-avatar>
     </div>
 
     <div class="table-oval">
       <ng-container *ngIf="shouldShowRevealButton$ | async">
-        <button 
+        <button
           (click)="onRevealCards()"
-          [disabled]="!(isButtonEnabled$ | async)"
+          [disabled]="!(isAdmin$ | async)"
           class="reveal-button"
         >
-          {{ (gameState.isRevealing ? 'Contando votos...' : 'Revelar cartas') }}
+          Revelar cartas
         </button>
       </ng-container>
 
-      
       <div *ngIf="gameState.isRevealing" class="loading-state">
-        <div class="spinner"></div>
-        <p>Contando votos...</p>
+        <div class="loading-state">
+          <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <p>Contando votos</p>
+        </div>
+
+
       </div>
+
+      <ng-container *ngIf="shouldShowNewVotingButton$ | async">
+        <button
+          (click)="resetGame()"
+          [disabled]="!(isAdmin$ | async)"
+          class="reveal-button"
+        >
+          Nueva Votación
+        </button>
+      </ng-container>
     </div>
 
     <div class="right-player">
-      <app-player-avatar *ngIf="rightPlayer"
+      <app-player-avatar
+        *ngIf="rightPlayer"
         [name]="rightPlayer.name"
         [isSpectator]="rightPlayer.isSpectator"
         [selectedCard]="rightPlayer.selectedCard"
         [hasSelectedCard]="!!rightPlayer.selectedCard"
-        [showCard]="!gameState.isVotingEnabled">
+        [showCard]="!gameState.isVotingEnabled"
+      >
       </app-player-avatar>
     </div>
   </div>
 
   <div class="bottom-players">
-    <app-player-avatar *ngFor="let player of bottomPlayers"
+    <app-player-avatar
+      *ngFor="let player of bottomPlayers"
       [name]="player.name"
       [isSpectator]="player.isSpectator"
       [selectedCard]="player.selectedCard"
       [hasSelectedCard]="!!player.selectedCard"
-      [showCard]="!gameState.isVotingEnabled">
+      [showCard]="!gameState.isVotingEnabled"
+    >
     </app-player-avatar>
   </div>
 </div>

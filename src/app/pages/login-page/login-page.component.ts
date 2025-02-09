@@ -65,7 +65,6 @@ export class LoginPageComponent {
 
       this.authService.login(userData);
 
-      // this.router.navigate(['/create-game']);
     }
   }
 }

@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { GameService } from './game.service';
-
-export interface User {
-  name: string;
-  role: 'admin' | 'player';
-}
+import { User } from '../../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,16 +14,23 @@ export class AuthService {
   constructor(private readonly router: Router, private readonly gameService: GameService) {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      this.currentUserSubject.next(JSON.parse(storedUser));
+      try {
+        this.currentUserSubject.next(JSON.parse(storedUser));
+      } catch (error) {
+        console.error('Error al parsear usuario desde localStorage:', error);
+        this.logout();
+      }
     }
-    
+
   }
 
   login(user: User) {
-    localStorage.setItem('user', JSON.stringify(user));
-    this.currentUserSubject.next(user);
+    const userWithAdminFlag = { ...user, isAdmin: user.role === 'admin' };
+    localStorage.setItem('user', JSON.stringify(userWithAdminFlag));
+    this.currentUserSubject.next(userWithAdminFlag);
     this.router.navigate(['/create-game']);
   }
+
 
   logout() {
     localStorage.removeItem('user');
@@ -37,7 +40,11 @@ export class AuthService {
 
     this.router.navigate(['/login']);
   }
-  
+
+  isAdmin$(): Observable<boolean> {
+    return this.currentUser$.pipe(map(user => user?.isAdmin === true));
+  }
+
   isAdmin(): boolean {
     return this.currentUserSubject.value?.role === 'admin';
   }

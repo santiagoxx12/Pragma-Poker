@@ -4,7 +4,7 @@ import { PlayerAvatarComponent } from '../../atoms/player-avatar/player-avatar.c
 import { GameState, Player } from '../../../interfaces/game.interface';
 import { GameService } from '../../../utils/services/game.service';
 import { AuthService } from '../../../utils/services/auth.service';
-import { combineLatest, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-game-table',
@@ -19,19 +19,21 @@ export class GameTableComponent {
   isAdmin$!: Observable<boolean>;
   isButtonEnabled$!: Observable<boolean>;
   shouldShowRevealButton$: Observable<boolean>;
+  shouldEnableRevealButton$!: Observable<boolean>;
+  shouldShowNewVotingButton$!: Observable<boolean>;
 
 
+ngOnInit() {
+  this.isAdmin$ = this.authService.currentUser$.pipe(
+    map(user => user?.isAdmin === true)
+  );
 
-  ngOnInit() {
-    this.isButtonEnabled$ = combineLatest([
-      this.authService.currentUser$.pipe(map(user => user?.role === 'admin')),
-      this.gameService.gameState$
-    ]).pipe(
-      map(([isAdmin, gameState]) => {
-        return isAdmin || this.gameService.isAllPlayersVoted();
-      })
-    );
+
+    this.gameService.gameState$.subscribe(state => {
+      this.gameState = state;
+    });
   }
+
 
   constructor(
     private readonly gameService: GameService,
@@ -48,17 +50,21 @@ export class GameTableComponent {
       averageVote: null,
       voteCount: {}
     };
-    this.isAdmin$ = this.authService.currentUser$.pipe(
-      map(user => user?.role === 'admin')
-    );
-    
+
+
     this.shouldShowRevealButton$ = this.gameService.gameState$.pipe(
       map(state => {
         const nonSpectators = state.players.filter(player => !player.isSpectator);
-        return nonSpectators.every(player => !!state.selectedCards[player.id]);
+        return nonSpectators.every(player => !!state.selectedCards[player.id]) &&
+               state.isVotingEnabled &&
+               !state.isRevealing;
       })
     );
-    
+
+    this.shouldShowNewVotingButton$ = this.gameService.gameState$.pipe(
+      map(state => !state.isVotingEnabled)
+    );
+
     this.gameService.gameState$.subscribe(state => {
       this.gameState = state;
     });
@@ -85,4 +91,10 @@ export class GameTableComponent {
   onRevealCards() {
     this.gameService.revealCards();
   }
+
+  resetGame() {
+    this.gameService.resetGame();
+  }
+
+
 }

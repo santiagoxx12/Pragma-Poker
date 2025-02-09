@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { InputFieldComponent } from '../../atoms/input-field/input-field.component';
 import { RadioButtonComponent } from '../../atoms/radio-button/radio-button.component';
 import { ButtonComponent } from '../../atoms/button/button.component';
+import { AuthService } from '../../../utils/services/auth.service';
 
 interface UserForm {
   name: FormControl<string>;
@@ -27,6 +28,12 @@ interface UserForm {
 export class CreateUserModalComponent implements OnInit {
   @Output() userCreated = new EventEmitter<{ name: string; viewMode: string; isAdmin: boolean }>();
   @Output() close = new EventEmitter<void>();
+
+
+  constructor(
+      private readonly authService: AuthService,
+
+    ) {}
 
   userForm = new FormGroup<UserForm>({
     name: new FormControl({ value: '', disabled: true },{
@@ -63,13 +70,14 @@ export class CreateUserModalComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.authService.isAdmin$().subscribe(isAdmin => {
       this.userCreated.emit({
         name: this.nameControl.value,
         viewMode: this.viewModeControl.value,
-        isAdmin: true
+        isAdmin: isAdmin
       });
       this.close.emit();
-
+    });
   }
+
 }
