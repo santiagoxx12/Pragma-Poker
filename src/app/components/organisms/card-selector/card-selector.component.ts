@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,10 +8,18 @@ import { CommonModule } from '@angular/common';
   templateUrl: './card-selector.component.html',
   styleUrl: './card-selector.component.css'
 })
-export class CardSelectorComponent {
+export class CardSelectorComponent implements OnChanges {
   @Input() cards: string[] = [];
   @Output() cardSelected = new EventEmitter<string>();
   selectedCard: string | null = null;
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['cards']) {
+      this.selectedCard = null;
+    }
+  }
+
 
   selectCard(card: string) {
     this.selectedCard = card;

@@ -1,0 +1,22 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h2 class="modal-title">Cambiar modo de puntaje de las tarjetas</h2>
+    <p class="modal-text">
+      Cambiar el sistema de votación reiniciará la partida. ¿Deseas continuar?
+    </p>
+    <div class="select-container">
+      <select [(ngModel)]="selectedSystem" class="voting-select">
+        <option [value]="'fibonacci'" [selected]="selectedSystem === 'fibonacci'">
+          Fibonacci (0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ?, ☕)
+        </option>
+        <option [value]="'power'" [selected]="selectedSystem === 'power'">
+          Potencias de 2 (0, 1, 2, 4, 8, 16, 32, 64, ?, ☕)
+        </option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
+      <button class="btn-confirm" (click)="onAccept()">Aceptar</button>
+    </div>
+  </div>
+</div>

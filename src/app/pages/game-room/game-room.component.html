@@ -2,27 +2,30 @@
   <app-create-user-modal
     *ngIf="showUserModal"
     (userCreated)="onUserCreated($event)"
-    (close)="showUserModal = false">
+    (close)="showUserModal = false"
+  >
   </app-create-user-modal>
 
   <app-game-header
     [roomName]="roomName"
-    [userName]="currentUserName">
+    [userName]="currentUserName"
+    [isAdmin]="isAdmin"
+  >
   </app-game-header>
 
-  <app-game-table
-    [players]="players">
-  </app-game-table>
+  <app-game-table [players]="players"> </app-game-table>
 
   <app-card-selector
     *ngIf="!isSpectator && gameState.isVotingEnabled"
     [cards]="votingSystem"
-    (cardSelected)="onCardSelected($event)">
+    (cardSelected)="onCardSelected($event)"
+  >
   </app-card-selector>
 
   <app-vote-results
     *ngIf="!gameState.isVotingEnabled"
     [voteCount]="gameState.voteCount"
-    [averageVote]="gameState.averageVote">
+    [averageVote]="gameState.averageVote"
+  >
   </app-vote-results>
 </div>

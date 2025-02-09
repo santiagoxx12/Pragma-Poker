@@ -1,6 +1,6 @@
   <div class="input-container">
-      <label>{{ label }}</label>
-      <input [formControl]="control" type="text" (blur)="control.markAsTouched()" />
+      <label for="inputField">{{ label }}</label>
+      <input id="inputField" [formControl]="control" type="text" (blur)="control.markAsTouched()" />
       <div class="error-message" *ngIf="shouldShowError()">
         <span *ngIf="control.errors?.['required']">El nombre es obligatorio.</span>
         <span *ngIf="control.errors?.['minlength']">Debe tener al menos 5 caracteres.</span>

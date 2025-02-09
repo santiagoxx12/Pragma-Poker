@@ -9,7 +9,8 @@
       'spectator-avatar': isSpectator,
       selected: hasSelectedCard,
       revealed: showCard,
-      admin: isAdmin
+      admin: isAdmin,
+      'current-user': isCurrentUser
     }"
   >
     <ng-container *ngIf="isSpectator">
@@ -24,7 +25,10 @@
       <div *ngIf="isAdmin" class="crown">👑</div>
     </ng-container>
   </div>
-  <div class="player-name">{{ name }}</div>
+  <div class="player-name">
+    <span class="name">{{ name }}</span>
+    <span *ngIf="isOwner" class="owner-tag">(Propietario)</span>
+  </div>
 </div>
 
 <app-view-mode-modal

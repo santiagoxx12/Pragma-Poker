@@ -14,7 +14,10 @@ import { AdminRoleModalComponent } from '../../organisms/admin-role-modal/admin-
   standalone: true,
   imports: [CommonModule, ViewModeModalComponent, AdminRoleModalComponent],
   templateUrl: './player-avatar.component.html',
-  styleUrl: './player-avatar.component.css'
+  styleUrl: './player-avatar.component.css',
+  host: {
+    '[class.is-admin]': 'currentUserIsAdmin'
+  }
 })
 export class PlayerAvatarComponent implements OnInit, OnDestroy {
   @Input() name!: string;
@@ -23,6 +26,7 @@ export class PlayerAvatarComponent implements OnInit, OnDestroy {
   @Input() hasSelectedCard = false;
   @Input() showCard = false;
   @Input() isAdmin = false;
+  @Input() isOwner = false;
 
   isCurrentUser = false;
   showViewModeModal = false;
@@ -53,6 +57,7 @@ export class PlayerAvatarComponent implements OnInit, OnDestroy {
       const player = gameState.players.find(p => p.name === this.name);
       if (player) {
         this.isAdmin = player.isAdmin;
+        this.isOwner = player.isOwner || false;
         this.cdr.detectChanges();
       }
     });

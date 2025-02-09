@@ -36,7 +36,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   currentUserId = '';
   gameState: GameState;
   isAdmin = false;
-  
+
   private readonly subscriptions = new Subscription();
 
   constructor(
@@ -88,14 +88,14 @@ export class GameRoomComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  onUserCreated(eventData: { name: string; viewMode: string; isAdmin: boolean }) {
+  onUserCreated(eventData: { name: string; viewMode: string; isAdmin: boolean; isOwner: boolean }) {
     this.isSpectator = eventData.viewMode === 'spectator';
     this.isAdmin = eventData.isAdmin;
     this.currentUserName = eventData.name;
     this.showUserModal = false;
 
     localStorage.setItem('user', JSON.stringify(eventData));
-    
+
     this.viewModeService.changeViewMode(eventData.viewMode as 'player' | 'spectator');
     this.currentUserId = this.gameService.addCurrentUser(eventData);
   }

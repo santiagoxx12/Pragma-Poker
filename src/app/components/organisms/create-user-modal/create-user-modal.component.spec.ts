@@ -67,6 +67,7 @@ describe('CreateUserModalComponent', () => {
       name: 'ValidUser',
       viewMode: 'admin',
       isAdmin: true,
+      isOwner:true
     });
 
     expect(component.close.emit).toHaveBeenCalled();

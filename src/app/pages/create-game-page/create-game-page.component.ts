@@ -3,7 +3,6 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { maxThreeNumbersValidator, onlyNumbersValidator } from '../../utils/validators/game-name.validator';
 import { InputFieldComponent } from '../../components/atoms/input-field/input-field.component';
 import { ButtonComponent } from '../../components/atoms/button/button.component';
-import { HeaderBarComponent } from '../../components/molecules/header-bar/header-bar.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { GameService } from '../../utils/services/game.service';
@@ -22,8 +21,6 @@ interface GameForm {
     ReactiveFormsModule,
     InputFieldComponent,
     ButtonComponent,
-    HeaderBarComponent,
-
   ],
 })
 export class CreateGamePageComponent {

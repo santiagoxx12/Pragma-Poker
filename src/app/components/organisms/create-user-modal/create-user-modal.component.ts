@@ -26,7 +26,7 @@ interface UserForm {
   styleUrls: ['./create-user-modal.component.css']
 })
 export class CreateUserModalComponent implements OnInit {
-  @Output() userCreated = new EventEmitter<{ name: string; viewMode: string; isAdmin: boolean }>();
+  @Output() userCreated = new EventEmitter<{ name: string; viewMode: string; isAdmin: boolean; isOwner: boolean; }>();
   @Output() close = new EventEmitter<void>();
 
 
@@ -71,11 +71,13 @@ export class CreateUserModalComponent implements OnInit {
 
   onSubmit() {
     this.authService.isAdmin$().subscribe(isAdmin => {
-      this.userCreated.emit({
+      const userData = {
         name: this.nameControl.value,
         viewMode: this.viewModeControl.value,
-        isAdmin: isAdmin
-      });
+        isAdmin: isAdmin,
+        isOwner: true
+      };
+      this.userCreated.emit(userData);
       this.close.emit();
     });
   }

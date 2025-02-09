@@ -57,7 +57,19 @@
   padding: 8px;
   font-size: 16px;
   transition: all 0.3s ease;
-  flex-shrink: 0;
+  font-weight: 500;
+
+}
+
+.invite-button:hover {
+  background: #9d9da130;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.312);
+}
+
+
+.invite-button:active {
+  background: #F6F7FC;
+  color: #330072;
 }
 
 .invite-button i {
@@ -111,4 +123,31 @@
   .header {
     gap: 24px;
   }
+}
+
+.change-voting-btn {
+  background: inherit;
+  color: white;
+  border: 1px solid #F6F7FC;
+  cursor: pointer;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.change-voting-icon {
+  font-size: 20px;
+  color: white;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.change-voting-icon:hover, .logout-btn:hover {
+  color: #BB65FF;
 }

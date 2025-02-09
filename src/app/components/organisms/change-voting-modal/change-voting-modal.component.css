@@ -1,0 +1,96 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1F0D3F;
+  border: 1px solid #BB65FF;
+  padding: 2rem;
+  border-radius: 25px;
+  max-width: 514px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.modal-title {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.modal-text {
+  color: white;
+  font-weight: 200;
+  font-size: 14px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.select-container {
+  margin-bottom: 24px;
+}
+
+.voting-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #6429CD;
+  border-radius: 100px;
+  font-size: 14px;
+  background: inherit;
+  color: white;
+}
+
+.voting-select option {
+  background: #1F0D3F;
+  color: white;
+}
+
+.btn-cancel {
+  cursor: pointer;
+  background: #b6b6be55;
+  color: #c3c3cee6;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  display: block;
+  height: 20%;
+}
+
+.btn-confirm {
+  cursor: pointer;
+  background: #F6F7FC;
+  color: #330072;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  display: block;
+  height: 20%;
+}
+
+.btn-confirm:enabled:hover {
+  background: #F6F7FC;
+  color: #330072;
+  box-shadow: 0 0 15px rgba(246, 247, 252, 0.8), inset 0 0 20px rgba(246, 247, 252, 0.2);
+}

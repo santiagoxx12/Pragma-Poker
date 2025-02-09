@@ -1,5 +1,8 @@
-<app-header-bar></app-header-bar>
-
+<div class="header-container">
+  <img src="assets/images/ficha-de-poker 1.svg" alt="Logo" class="logo" />
+  <h2>Crear Partida</h2>
+</div>
+           
 <div class="container">
   <form [formGroup]="gameForm" (ngSubmit)="onGameCreate()">
     <app-input-field

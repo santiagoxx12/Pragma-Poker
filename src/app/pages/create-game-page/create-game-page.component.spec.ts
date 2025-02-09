@@ -3,7 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateGamePageComponent } from './create-game-page.component';
 import { InputFieldComponent } from '../../components/atoms/input-field/input-field.component';
 import { ButtonComponent } from '../../components/atoms/button/button.component';
-import { HeaderBarComponent } from '../../components/molecules/header-bar/header-bar.component';
 
 describe('CreateGamePageComponent', () => {
   let component: CreateGamePageComponent;
@@ -11,11 +10,10 @@ describe('CreateGamePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ 
-        CreateGamePageComponent,  
+      imports: [
+        CreateGamePageComponent,
         InputFieldComponent,
         ButtonComponent,
-        HeaderBarComponent,
         ReactiveFormsModule
       ]
     }).compileComponents();

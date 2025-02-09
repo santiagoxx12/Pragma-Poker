@@ -6,6 +6,13 @@
   />
   <h1 class="room-name">{{ formattedRoomName }}</h1>
   <div class="actions">
+    <i
+    *ngIf="isAdmin"
+    class="fa fa-exchange change-voting-icon"
+    (click)="showChangeVotingModal = true"
+    (keydown.enter)="showChangeVotingModal">
+  </i>
+
     <div class="user-avatar">{{ userInitials }}</div>
     <button class="invite-button" (click)="showInviteModal = true">
       <i class="fa fa-share-alt"></i>
@@ -19,5 +26,12 @@
 
 <app-invite-modal
   *ngIf="showInviteModal"
-  (close)="showInviteModal = false"
-></app-invite-modal>
+  (close)="showInviteModal = false">
+</app-invite-modal>
+
+<app-change-voting-modal
+  *ngIf="showChangeVotingModal && isAdmin"
+  [currentSystem]="currentVotingSystem"
+  (close)="showChangeVotingModal = false"
+  (systemChanged)="onVotingSystemChanged($event)">
+</app-change-voting-modal>

@@ -98,9 +98,47 @@ export class GameService {
   gameState$ = this.gameState.asObservable();
 
   changeVotingSystem(system: 'fibonacci' | 'power') {
+    const currentState = this.gameState.value;
+    const currentUser = currentState.players.find(p => p.id === 'current-user');
+
+    if (currentUser?.isAdmin && currentUser?.isSpectator) {
+      if (!currentState.isVotingEnabled) {
+        this.resetGame();
+        setTimeout(() => {
+          this.updateVotingSystem(system);
+          setTimeout(() => {
+            this.triggerDefaultPlayersSelection();
+          }, 100);
+        }, 100);
+      } else {
+        this.updateVotingSystem(system);
+        setTimeout(() => {
+          this.triggerDefaultPlayersSelection();
+        }, 100);
+      }
+    }
+    else if (!currentState.isVotingEnabled) {
+        this.resetGame();
+        setTimeout(() => {
+          this.updateVotingSystem(system);
+        }, 100);
+      } else {
+        this.updateVotingSystem(system);
+      }
+  }
+
+  private updateVotingSystem(system: 'fibonacci' | 'power') {
+    const currentState = this.gameState.value;
+
+    const resetPlayers = currentState.players.map(player => ({
+      ...player,
+      selectedCard: null
+    }));
+
     this.gameState.next({
-      ...this.gameState.value,
+      ...currentState,
       currentVotingSystem: this.votingSystems[system],
+      players: resetPlayers,
       selectedCards: {},
       isVotingEnabled: true,
       isRevealing: false,
@@ -166,6 +204,7 @@ export class GameService {
     name: string;
     viewMode: string;
     isAdmin: boolean;
+    isOwner: boolean;
   }) {
     const currentState = this.gameState.value;
     const newPlayer: Player = {
@@ -173,6 +212,7 @@ export class GameService {
       name: userData.name,
       isSpectator: userData.viewMode === 'spectator',
       isAdmin: userData.isAdmin,
+      isOwner: userData.isOwner,
       selectedCard: null,
       position: 6,
     };

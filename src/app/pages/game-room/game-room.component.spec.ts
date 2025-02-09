@@ -63,7 +63,7 @@ describe('GameRoomComponent', () => {
   });
 
   it('should handle user creation', () => {
-    const userData = { name: 'Alice', viewMode: 'player', isAdmin: false };
+    const userData = { name: 'Alice', viewMode: 'player', isAdmin: false, isOwner: true };
     component.onUserCreated(userData);
 
     expect(component.isSpectator).toBeFalse();
@@ -73,7 +73,7 @@ describe('GameRoomComponent', () => {
   });
 
   it('should trigger spectator actions on user creation', () => {
-    const userData = { name: 'Bob', viewMode: 'spectator', isAdmin: false };
+    const userData = { name: 'Bob', viewMode: 'spectator', isAdmin: false , isOwner: true};
     component.onUserCreated(userData);
 
     expect(component.isSpectator).toBeTrue();

@@ -26,6 +26,5 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app.title).toEqual('pragma-poker');
   });
-//ya, por eso debes aprender a leer cada prueba para ver si te sirven o no, las pruebas de 
-// app. component vienen por defecto, entonces si no te sirven borras a que no necesites
+
 });

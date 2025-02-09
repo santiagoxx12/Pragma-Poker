@@ -2,6 +2,7 @@ export interface Player {
   id: string;
   name: string;
   isSpectator: boolean;
+  isOwner?: boolean;
   isAdmin: boolean;
   selectedCard?: string | null;
   position: number;
