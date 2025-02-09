@@ -1,0 +1,35 @@
+<div class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Invitar jugadores</h2>
+      <button
+        class="close-button"
+        (click)="close.emit()"
+        (keydown.enter)="close.emit()"
+        tabindex="0"
+        aria-label="Cerrar modal"
+      >
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-content">
+      <div class="url-container">
+        <input
+          type="text"
+          [value]="inviteUrl"
+          readonly
+          class="url-input"
+          aria-label="URL de invitación"
+        >
+      </div>
+      <button
+        [disabled]="iscopying"
+        (click)="copyInviteUrl()"
+        class="invite-button"
+        aria-label="Copiar link"
+      >
+        {{ buttonText }}
+      </button>
+    </div>
+  </div>
+</div>

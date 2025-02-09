@@ -1,17 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../utils/services/auth.service';
+import { InviteModalComponent } from '../../organisms/invite-modal/invite-modal.component';
 
 @Component({
   selector: 'app-game-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, InviteModalComponent],
   templateUrl: './game-header.component.html',
   styleUrl: './game-header.component.css'
 })
 export class GameHeaderComponent {
   @Input() roomName!: string;
   @Input() userName!: string;
+  showInviteModal = false;
 
   constructor(private readonly authService: AuthService) {}
 

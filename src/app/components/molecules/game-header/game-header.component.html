@@ -1,9 +1,13 @@
 <header class="header">
-  <img src="assets/images/ficha-de-poker 1.svg" alt="Planning Poker Logo" class="logo">
+  <img
+    src="assets/images/ficha-de-poker 1.svg"
+    alt="Planning Poker Logo"
+    class="logo"
+  />
   <h1 class="room-name">{{ formattedRoomName }}</h1>
   <div class="actions">
     <div class="user-avatar">{{ userInitials }}</div>
-    <button class="invite-button">
+    <button class="invite-button" (click)="showInviteModal = true">
       <i class="fa fa-share-alt"></i>
       <span class="invite-text">Invitar jugadores</span>
     </button>
@@ -12,3 +16,8 @@
     </button>
   </div>
 </header>
+
+<app-invite-modal
+  *ngIf="showInviteModal"
+  (close)="showInviteModal = false"
+></app-invite-modal>
