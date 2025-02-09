@@ -1,0 +1,13 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h2 class="modal-title">Asignar rol de administrador</h2>
+    <p class="modal-text">
+      ¿Está seguro de que desea asignar el rol de administrador a {{ playerName }}?
+      Esta acción le otorgará privilegios de administrador.
+    </p>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
+      <button class="btn-confirm" (click)="onConfirm()">Sí, asignar</button>
+    </div>
+  </div>
+</div>

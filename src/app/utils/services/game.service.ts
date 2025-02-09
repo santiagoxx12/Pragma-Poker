@@ -223,7 +223,6 @@ export class GameService {
       }, 1000);
     }
 
-    this.printSelectedCards();
   }
 
   public checkAndAutoReveal() {
@@ -258,7 +257,6 @@ export class GameService {
           player.id
         );
         this.updatePlayerCard(player.id, randomCard);
-        this.printSelectedCards();
       }, delay);
     });
   }
@@ -309,10 +307,6 @@ export class GameService {
       players: updatedPlayers,
       selectedCards: updatedSelectedCards,
     });
-  }
-
-  private printSelectedCards() {
-    console.log('Cartas seleccionadas: ', this.gameState.value.selectedCards);
   }
 
   isAllPlayersVoted(): boolean {

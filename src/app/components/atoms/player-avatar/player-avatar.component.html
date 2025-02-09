@@ -1,24 +1,42 @@
-<div class="player-container" (click)="onAvatarClick()">
-  <div [ngClass]="{
-    'player-card': !isSpectator,
-    'spectator-avatar': isSpectator,
-    'selected': hasSelectedCard,
-    'revealed': showCard
-  }">
+<div
+  class="player-container"
+  (click)="onAvatarClick()"
+  (keydown.enter)="onAvatarClick()"
+>
+  <div
+    [ngClass]="{
+      'player-card': !isSpectator,
+      'spectator-avatar': isSpectator,
+      selected: hasSelectedCard,
+      revealed: showCard,
+      admin: isAdmin
+    }"
+  >
     <ng-container *ngIf="isSpectator">
       <div class="initials">{{ getInitials() }}</div>
+      <div *ngIf="isAdmin" class="crown">👑</div>
     </ng-container>
     <ng-container *ngIf="!isSpectator">
       <div class="card-content">
         <span *ngIf="showCard">{{ selectedCard }}</span>
         <span *ngIf="!showCard && hasSelectedCard"></span>
       </div>
+      <div *ngIf="isAdmin" class="crown">👑</div>
     </ng-container>
   </div>
   <div class="player-name">{{ name }}</div>
 </div>
 
-<app-view-mode-modal 
+<app-view-mode-modal
   *ngIf="showViewModeModal && isVotingEnabled"
-  (close)="showViewModeModal = false">
+  (close)="showViewModeModal = false"
+>
 </app-view-mode-modal>
+
+<app-admin-role-modal
+  *ngIf="showAdminModal"
+  [playerName]="name"
+  (cancel)="showAdminModal = false"
+  (confirm)="assignAdminRole()"
+>
+</app-admin-role-modal>
