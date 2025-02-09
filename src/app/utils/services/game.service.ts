@@ -226,7 +226,7 @@ export class GameService {
     this.printSelectedCards();
   }
 
-  private checkAndAutoReveal() {
+  public checkAndAutoReveal() {
     const currentState = this.gameState.value;
     const currentUser = currentState.players.find(p => p.id === 'current-user');
 

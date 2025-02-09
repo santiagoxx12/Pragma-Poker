@@ -1,0 +1,29 @@
+<div class="modal-overlay">
+    <div class="modal-content">
+      <h2 class="modal-title">Cambiar tipo visualización</h2>
+  
+      <form [formGroup]="viewModeForm" (ngSubmit)="onContinue()">
+        <div class="radio-group">
+          <app-radio-button
+            label="Jugador"
+            value="player"
+            id="player-mode"
+            [control]="viewModeControl">
+          </app-radio-button>
+  
+          <app-radio-button
+            label="Espectador"
+            value="spectator"
+            id="spectator-mode"
+            [control]="viewModeControl">
+          </app-radio-button>
+        </div>
+  
+        <app-button 
+          text="Continuar" 
+          [disabled]="viewModeForm.invalid">
+        </app-button>
+      </form>
+    </div>
+  </div>
+  

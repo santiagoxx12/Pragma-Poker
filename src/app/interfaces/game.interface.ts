@@ -11,7 +11,7 @@ export interface GameState {
   players: Player[];
   roomName: string;
   currentVotingSystem: string[];
-  selectedCards: { [playerId: string]: string };
+  selectedCards: { [playerId: string]: string | null};
   isVotingEnabled: boolean;
   isRevealing: boolean;
   averageVote: number | null;

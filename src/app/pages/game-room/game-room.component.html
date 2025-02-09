@@ -14,7 +14,7 @@
     [players]="players">
   </app-game-table>
 
-    <app-card-selector
+  <app-card-selector
     *ngIf="!isSpectator && gameState.isVotingEnabled"
     [cards]="votingSystem"
     (cardSelected)="onCardSelected($event)">

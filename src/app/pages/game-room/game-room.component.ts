@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CreateUserModalComponent } from '../../components/organisms/create-user-modal/create-user-modal.component';
 import { GameHeaderComponent } from '../../components/molecules/game-header/game-header.component';
@@ -9,6 +9,8 @@ import { GameState, Player } from '../../interfaces/game.interface';
 import { ActivatedRoute } from '@angular/router';
 import { VoteResultsComponent } from '../../components/organisms/vote-results/vote-results.component';
 import { AuthService } from '../../utils/services/auth.service';
+import { combineLatest, Subscription } from 'rxjs';
+import { ViewModeService } from '../../utils/services/view-mode.service';
 
 @Component({
   selector: 'app-game-room',
@@ -24,7 +26,7 @@ import { AuthService } from '../../utils/services/auth.service';
   templateUrl: './game-room.component.html',
   styleUrl: './game-room.component.css'
 })
-export class GameRoomComponent implements OnInit {
+export class GameRoomComponent implements OnInit, OnDestroy {
   showUserModal = true;
   isSpectator = false;
   currentUserName = '';
@@ -34,10 +36,13 @@ export class GameRoomComponent implements OnInit {
   currentUserId = '';
   gameState: GameState;
   isAdmin = false;
+  
+  private readonly subscriptions = new Subscription();
 
   constructor(
     private readonly gameService: GameService,
     private readonly authService: AuthService,
+    private readonly viewModeService: ViewModeService,
     private readonly route: ActivatedRoute
   ) {
     this.gameState = {
@@ -59,16 +64,28 @@ export class GameRoomComponent implements OnInit {
       this.gameService.updateRoomName(gameName);
     });
 
-    this.gameService.gameState$.subscribe(state => {
-      this.players = state.players;
-      this.votingSystem = state.currentVotingSystem;
-      this.roomName = state.roomName;
-      this.gameState = state;
-    });
+    this.subscriptions.add(
+      combineLatest([
+        this.gameService.gameState$,
+        this.viewModeService.viewMode$
+      ]).subscribe(([state, viewMode]) => {
+        this.players = state.players;
+        this.votingSystem = state.currentVotingSystem;
+        this.roomName = state.roomName;
+        this.gameState = state;
+        this.isSpectator = viewMode === 'spectator';
+      })
+    );
 
-    this.authService.isAdmin$().subscribe(isAdmin => {
-      this.isAdmin = isAdmin;
-    });
+    this.subscriptions.add(
+      this.authService.isAdmin$().subscribe(isAdmin => {
+        this.isAdmin = isAdmin;
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   onUserCreated(eventData: { name: string; viewMode: string; isAdmin: boolean }) {
@@ -78,7 +95,8 @@ export class GameRoomComponent implements OnInit {
     this.showUserModal = false;
 
     localStorage.setItem('user', JSON.stringify(eventData));
-
+    
+    this.viewModeService.changeViewMode(eventData.viewMode as 'player' | 'spectator');
     this.currentUserId = this.gameService.addCurrentUser(eventData);
   }
 
@@ -92,5 +110,5 @@ export class GameRoomComponent implements OnInit {
     localStorage.removeItem('user');
     this.gameService.resetGameState();
     window.location.assign(window.location.href);
-    }
+  }
 }

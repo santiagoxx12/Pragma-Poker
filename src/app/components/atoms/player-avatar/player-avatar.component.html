@@ -1,4 +1,4 @@
-<div class="player-container">
+<div class="player-container" (click)="onAvatarClick()">
   <div [ngClass]="{
     'player-card': !isSpectator,
     'spectator-avatar': isSpectator,
@@ -17,3 +17,8 @@
   </div>
   <div class="player-name">{{ name }}</div>
 </div>
+
+<app-view-mode-modal 
+  *ngIf="showViewModeModal && isVotingEnabled"
+  (close)="showViewModeModal = false">
+</app-view-mode-modal>

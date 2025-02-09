@@ -7,12 +7,12 @@ import { LogoComponent } from './components/atoms/logo/logo.component';
 import { SplashScreenComponent } from './components/atoms/splash-screen/splash-screen.component';
 import { InputFieldComponent } from './components/atoms/input-field/input-field.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
 @NgModule({
   declarations: [
     AppComponent,
     LogoComponent,
-    SplashScreenComponent
+    SplashScreenComponent,
+ 
   ],
   imports: [
     BrowserModule,
