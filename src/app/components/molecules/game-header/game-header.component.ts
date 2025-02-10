@@ -49,8 +49,12 @@ export class GameHeaderComponent {
   }
 
   get formattedRoomName(): string {
+    if (!this.roomName) {
+      return '';
+    }
     return this.roomName.split('-')[0];
   }
+
 
   logout() {
     this.authService.logout();

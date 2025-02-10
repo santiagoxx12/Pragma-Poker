@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlayerAvatarComponent } from '../../atoms/player-avatar/player-avatar.component';
 import { GameState, Player } from '../../../interfaces/game.interface';
@@ -13,32 +13,16 @@ import { map, Observable } from 'rxjs';
   templateUrl: './game-table.component.html',
   styleUrl: './game-table.component.css'
 })
-export class GameTableComponent {
+export class GameTableComponent implements OnInit {
   @Input() players: Player[] = [];
   gameState: GameState;
   isAdmin$!: Observable<boolean>;
-  isButtonEnabled$!: Observable<boolean>;
-  shouldShowRevealButton$: Observable<boolean>;
-  shouldEnableRevealButton$!: Observable<boolean>;
+  shouldShowRevealButton$!: Observable<boolean>;
   shouldShowNewVotingButton$!: Observable<boolean>;
-
-
-ngOnInit() {
-  this.isAdmin$ = this.authService.currentUser$.pipe(
-    map(user => user?.isAdmin === true)
-  );
-
-
-    this.gameService.gameState$.subscribe(state => {
-      this.gameState = state;
-    });
-  }
-
 
   constructor(
     private readonly gameService: GameService,
-    private  readonly authService: AuthService
-
+    private readonly authService: AuthService
   ) {
     this.gameState = {
       players: [],
@@ -50,14 +34,21 @@ ngOnInit() {
       averageVote: null,
       voteCount: {}
     };
+  }
 
+  ngOnInit() {
+    this.isAdmin$ = this.authService.currentUser$.pipe(
+      map(user => user?.isAdmin === true)
+    );
 
     this.shouldShowRevealButton$ = this.gameService.gameState$.pipe(
       map(state => {
         const nonSpectators = state.players.filter(player => !player.isSpectator);
-        return nonSpectators.every(player => !!state.selectedCards[player.id]) &&
-               state.isVotingEnabled &&
-               !state.isRevealing;
+        return (
+          nonSpectators.every(player => !!state.selectedCards[player.id]) &&
+          state.isVotingEnabled &&
+          !state.isRevealing
+        );
       })
     );
 
@@ -95,6 +86,4 @@ ngOnInit() {
   resetGame() {
     this.gameService.resetGame();
   }
-
-
 }

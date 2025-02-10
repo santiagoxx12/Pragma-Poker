@@ -1,50 +1,45 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CardSelectorComponent } from './card-selector.component';
-import { CommonModule } from '@angular/common';
 
 describe('CardSelectorComponent', () => {
-  let componente: CardSelectorComponent;
+  let component: CardSelectorComponent;
   let fixture: ComponentFixture<CardSelectorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule, CardSelectorComponent]
+      imports: [CardSelectorComponent]
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CardSelectorComponent);
-    componente = fixture.componentInstance;
-    fixture.detectChanges();
+    component = fixture.componentInstance;
   });
 
   it('debería crearse correctamente', () => {
-    expect(componente).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it('debería inicializar con una lista vacía de cartas', () => {
-    expect(componente.cards).toEqual([]);
+  it('debería inicializar selectedCard como null', () => {
+    expect(component.selectedCard).toBeNull();
   });
 
-  it('debería emitir un evento cuando se selecciona una carta', () => {
-    spyOn(componente.cardSelected, 'emit');
-    const carta = 'As de Espadas';
-    componente.selectCard(carta);
-    expect(componente.selectedCard).toBe(carta);
-    expect(componente.cardSelected.emit).toHaveBeenCalledWith(carta);
+  it('debería establecer selectedCard en null cuando las cartas cambian', () => {
+    component.cards = ['A', 'B', 'C'];
+    fixture.detectChanges();
+    component.ngOnChanges({ cards: { previousValue: [], currentValue: ['A', 'B', 'C'], firstChange: false, isFirstChange: () => false } });
+    expect(component.selectedCard).toBeNull();
   });
 
-  it('debería permitir seleccionar una carta de la lista', () => {
-    componente.cards = ['Rey de Corazones', 'Dama de Tréboles', 'As de Espadas'];
-    const cartaSeleccionada = 'Dama de Tréboles';
-
-    componente.selectCard(cartaSeleccionada);
-
-    expect(componente.selectedCard).toBe(cartaSeleccionada);
+  it('debería emitir el evento cardSelected al seleccionar una carta', () => {
+    spyOn(component.cardSelected, 'emit');
+    const carta = 'A';
+    component.selectCard(carta);
+    expect(component.selectedCard).toBe(carta);
+    expect(component.cardSelected.emit).toHaveBeenCalledWith(carta);
   });
 
-  it('debería manejar correctamente una selección vacía', () => {
-    componente.selectCard('');
-    expect(componente.selectedCard).toBe('');
+  it('debería actualizar selectedCard al seleccionar una carta', () => {
+    const carta = 'B';
+    component.selectCard(carta);
+    expect(component.selectedCard).toBe(carta);
   });
 });

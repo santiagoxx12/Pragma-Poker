@@ -26,7 +26,7 @@ export class InviteModalComponent {
     }
   }
 
-  private toggleCopyState(text: string): void {
+  public toggleCopyState(text: string): void {
     this.iscopying = true;
     this.buttonText = text;
     setTimeout(() => {

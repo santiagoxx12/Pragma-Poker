@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AdminRoleModalComponent } from './admin-role-modal.component';
 
 describe('AdminRoleModalComponent', () => {
@@ -8,16 +7,32 @@ describe('AdminRoleModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AdminRoleModalComponent]
-    })
-    .compileComponents();
+      imports: [AdminRoleModalComponent]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AdminRoleModalComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('debería crearse correctamente', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('debería emitir el evento cancel al llamar a onCancel', () => {
+    spyOn(component.cancel, 'emit');
+    component.onCancel();
+    expect(component.cancel.emit).toHaveBeenCalled();
+  });
+
+  it('debería emitir el evento confirm al llamar a onConfirm', () => {
+    spyOn(component.confirm, 'emit');
+    component.onConfirm();
+    expect(component.confirm.emit).toHaveBeenCalled();
+  });
+
+  it('debería recibir un nombre de jugador como input', () => {
+    component.playerName = 'Juan Pérez';
+    fixture.detectChanges();
+    expect(component.playerName).toBe('Juan Pérez');
   });
 });

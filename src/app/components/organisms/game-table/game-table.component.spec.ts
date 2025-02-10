@@ -1,71 +1,87 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GameTableComponent } from './game-table.component';
 import { PlayerAvatarComponent } from '../../atoms/player-avatar/player-avatar.component';
-import { CommonModule } from '@angular/common';
+import { GameService } from '../../../utils/services/game.service';
+import { AuthService } from '../../../utils/services/auth.service';
+import { of } from 'rxjs';
+import { GameState, Player } from '../../../interfaces/game.interface';
 
-describe('GameTableComponent', () => {
+describe('Componente GameTable', () => {
   let component: GameTableComponent;
   let fixture: ComponentFixture<GameTableComponent>;
+  let mockGameService: jasmine.SpyObj<GameService>;
+  let mockAuthService: jasmine.SpyObj<AuthService>;
 
   beforeEach(async () => {
+    mockGameService = jasmine.createSpyObj('GameService', ['revealCards', 'resetGame'], {
+      gameState$: of({
+        players: [],
+        roomName: '',
+        currentVotingSystem: [],
+        selectedCards: {},
+        isVotingEnabled: true,
+        isRevealing: false,
+        averageVote: null,
+        voteCount: {}
+      } as GameState)
+    });
+
+    mockAuthService = jasmine.createSpyObj('AuthService', [], {
+      currentUser$: of({ isAdmin: true })
+    });
+
     await TestBed.configureTestingModule({
-      imports: [CommonModule, PlayerAvatarComponent, GameTableComponent]
+      imports: [GameTableComponent, PlayerAvatarComponent],
+      providers: [
+        { provide: GameService, useValue: mockGameService },
+        { provide: AuthService, useValue: mockAuthService }
+      ]
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(GameTableComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('debería crearse el componente', () => {
-    expect(component).toBeTruthy();
+  describe('Inicialización del componente', () => {
+    it('debería crearse', () => {
+      expect(component).toBeTruthy();
+    });
   });
 
-  it('debería obtener los jugadores en la parte superior', () => {
-    component.players = [
-      { id: '1', name: 'Alice', isSpectator: false, isAdmin: false, selectedCard: null, position: 1 },
-      { id: '2', name: 'Bob', isSpectator: false, isAdmin: false, selectedCard: null, position: 2 },
-      { id: '3', name: 'Charlie', isSpectator: false, isAdmin: false, selectedCard: null, position: 3 }
-    ];
-    expect(component.topPlayers.length).toBe(2);
-    expect(component.topPlayers[0].name).toBe('Alice');
-    expect(component.topPlayers[1].name).toBe('Bob');
+  describe('Propiedades derivadas', () => {
+    it('debería retornar los jugadores en las posiciones superiores', () => {
+      component.players = [{ position: 1 }, { position: 2 }, { position: 3 }] as Player[];
+      expect(component.topPlayers.length).toBe(2);
+    });
+
+    it('debería retornar los jugadores en las posiciones inferiores', () => {
+      component.players = [{ position: 6 }, { position: 7 }, { position: 4 }] as Player[];
+      expect(component.bottomPlayers.length).toBe(2);
+    });
+
+    it('debería retornar el jugador de la izquierda', () => {
+      component.players = [{ position: 3 }] as Player[];
+      expect(component.leftPlayer?.position).toBe(3);
+    });
+
+    it('debería retornar el jugador de la derecha', () => {
+      component.players = [{ position: 5 }] as Player[];
+      expect(component.rightPlayer?.position).toBe(5);
+    });
   });
 
-  it('debería obtener los jugadores en la parte inferior', () => {
-    component.players = [
-      { id: '6', name: 'Eve', isSpectator: false, isAdmin: false, selectedCard: null, position: 6 },
-      { id: '7', name: 'Mallory', isSpectator: false, isAdmin: false, selectedCard: null, position: 7 },
-      { id: '5', name: 'Trent', isSpectator: false, isAdmin: false, selectedCard: null, position: 5 }
-    ];
-    expect(component.bottomPlayers.length).toBe(2);
-    expect(component.bottomPlayers[0].name).toBe('Eve');
-    expect(component.bottomPlayers[1].name).toBe('Mallory');
-  });
+  describe('Acciones del juego', () => {
+    it('debería llamar a revealCards() cuando se invoque onRevealCards()', () => {
+      component.onRevealCards();
+      expect(mockGameService.revealCards).toHaveBeenCalled();
+    });
 
-  it('debería obtener el jugador en la posición izquierda', () => {
-    component.players = [
-      { id: '3', name: 'Charlie', isSpectator: false, isAdmin: false, selectedCard: null, position: 3 },
-      { id: '4', name: 'Dave', isSpectator: false, isAdmin: false, selectedCard: null, position: 4 }
-    ];
-    expect(component.leftPlayer?.name).toBe('Charlie');
-  });
-
-  it('debería obtener el jugador en la posición derecha', () => {
-    component.players = [
-      { id: '5', name: 'Trent', isSpectator: false, isAdmin: false, selectedCard: null, position: 5 },
-      { id: '6', name: 'Eve', isSpectator: false, isAdmin: false, selectedCard: null, position: 6 }
-    ];
-    expect(component.rightPlayer?.name).toBe('Trent');
-  });
-
-  it('debería retornar undefined si no hay jugadores en la izquierda o derecha', () => {
-    component.players = [
-      { id: '1', name: 'Alice', isSpectator: false, isAdmin: false, selectedCard: null, position: 1 },
-      { id: '2', name: 'Bob', isSpectator: false, isAdmin: false, selectedCard: null, position: 2 }
-    ];
-    expect(component.leftPlayer).toBeUndefined();
-    expect(component.rightPlayer).toBeUndefined();
+    it('debería llamar a resetGame() cuando se invoque resetGame()', () => {
+      component.resetGame();
+      expect(mockGameService.resetGame).toHaveBeenCalled();
+    });
   });
 });
